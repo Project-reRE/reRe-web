@@ -5,7 +5,13 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "app/*": ["app/*"],
+      "config/*": ["app/_config/*"],
+      "shared/*": ["app/_shared/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
