@@ -1,9 +1,9 @@
+import TopBannerSlider from '@repo/ui/topBannerSlider';
+
 export default function Home() {
   return (
     <div>
-      <ul>
-        <li className="text-primary-orange-60">안녕</li>
-      </ul>
+      <TopBannerSlider items={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]} />
     </div>
   );
 }
