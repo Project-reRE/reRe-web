@@ -6,11 +6,9 @@
         "name": "next"
       }
     ],
-    "baseUrl": "src",
+    "baseUrl": "app",
     "paths": {
-      "app/*": ["app/*"],
-      "config/*": ["app/_config/*"],
-      "shared/*": ["app/_shared/*"]
+      "*": ["*"]
     }
   },
   "include": [
