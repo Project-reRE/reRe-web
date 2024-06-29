@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../global.css';
 import { Color } from '@repo/tailwind-config/theme';
+import Header from 'components/header';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`w-full h-full bg-${Color['background-gray-10']}`}>{children}</body>
+      <body className={`w-full h-full bg-background-gray-10`}>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
