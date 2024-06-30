@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: " 메인 기능 개발 Todo 리스트"
-title: ''
+title: "[Feat] "
 labels: feature
 assignees: ''
 

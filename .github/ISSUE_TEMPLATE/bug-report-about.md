@@ -1,7 +1,7 @@
 ---
 name: Bug Report about
 about: 버그 발생 보고 및 해결 방안 기록
-title: ''
+title: "[Bug]"
 labels: bug
 assignees: ''
 

@@ -1,7 +1,7 @@
 ---
 name: PR request
 about: Pull Request 형식
-title: ''
+title: "[Feat] "
 labels: ''
 assignees: ''
 
