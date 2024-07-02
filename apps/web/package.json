@@ -16,9 +16,11 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/services": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "next-auth": "^4.24.7"
   }
 }
