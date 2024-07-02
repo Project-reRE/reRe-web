@@ -3,6 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": ""
+    "./http.ts": "./http.ts",
+    "./authOptions.ts": "./authOptions.ts"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "next-auth": "^4.24.7"
   }
 }
