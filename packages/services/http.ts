@@ -39,7 +39,6 @@ class RequestInterceptors {
     if (params) {
       requestUrl += '?' + new URLSearchParams(params).toString();
     }
-    //medium.com/meta-box/how-to-send-get-and-post-requests-with-javascript-fetch-api-d0685b7ee6ed
     const res = await fetch(requestUrl, { method: 'GET', ...this.#config }).then((res) => res.json());
 
     return res;
