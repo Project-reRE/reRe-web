@@ -4,6 +4,42 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Pretendard';
+@layer base {
+  #root,
+  #__next {
+    isolation: isolate;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Pretendard';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
 }

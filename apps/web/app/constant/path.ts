@@ -1,6 +1,6 @@
 export const PATH = {
   MAIN: '/',
-  LOGIN: '/login',
+  SIGN_IN: '/sign-in',
   MOVIE: '/movie',
   LIBRARY: '/library',
   MUSIC: '/music',
