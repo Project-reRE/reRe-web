@@ -1,18 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["IMPORTANT_GLOBAL_VARIABLE"],
-  "globalDependencies": [".env", "tsconfig.json"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "env": ["API_URL"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env.production.local",
-        ".env.local",
-        ".env.production",
-        ".env"
-      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env.production.local", ".env.local", ".env.production", ".env"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {
@@ -21,14 +12,10 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env.development.local",
-        ".env.local",
-        ".env.development",
-        ".env"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", ".env.development.local", ".env.local", ".env.development", ".env"]
     },
     "test": {}
-  }
+  },
+  "globalDependencies": [".env", "tsconfig.json"],
+  "globalPassThroughEnv": ["KAKAO_CLIENT_ID", "KAKAO_SECRET"]
 }
