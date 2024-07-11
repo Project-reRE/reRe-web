@@ -48,6 +48,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           export VERSION=$(node -p "require('./apps/web/package.json').version")
+          docker tag ${{ secrets.DOCKER_REPO_WEB }} ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
           docker build -t ${{ secrets.DOCKER_REPO_WEB }}:$VERSION -f apps/web/Dockerfile .
           docker push ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
 
