@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./apps/web
+    container_name: ${CONTAINER_NAME_WEB}
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - NGINX_CONF_PATH=${NGINX_CONF_PATH_WEB}
+
+  admin:
+    build:
+      context: ./apps/admin
+    container_name: ${CONTAINER_NAME_ADMIN}
+    ports:
+      - '3001:3000'
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - NGINX_CONF_PATH=${NGINX_CONF_PATH_ADMIN}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - '80:80'
+    volumes:
+      - ./${NGINX_CONF_PATH_WEB}:/etc/nginx/conf.d/${NGINX_CONF_PATH_WEB}
+      - ./${NGINX_CONF_PATH_ADMIN}:/etc/nginx/conf.d/${NGINX_CONF_PATH_ADMIN}
+
+    environment:
+      NGINX_CONF_PATH: ${NGINX_CONF_PATH_WEB} # 기본값으로 설정
+    entrypoint: /bin/sh -c "cp /etc/nginx/conf.d/$${NGINX_CONF_PATH} /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - web
+      - admin
+    networks:
+      - webnet
+
+networks:
+  webnet:
