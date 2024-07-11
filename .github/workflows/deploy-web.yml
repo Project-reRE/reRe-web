@@ -44,13 +44,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build Web app
-        run: pnpm run build --filter web
-
       - name: Build and push Docker image
         run: |
           export VERSION=$(node -p "require('./package.json').version")
-          docker image tag ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
           docker build -t ${{ secrets.DOCKER_REPO_WEB }}:$VERSION -f apps/web/Dockerfile .
           docker push ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
 
