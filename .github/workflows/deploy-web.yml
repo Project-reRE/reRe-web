@@ -43,15 +43,27 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
+      - name: Get version from package.json
+        id: get_version
+        run: echo "VERSION=$(node -p \"require('./apps/web/package.json').version\")" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build and push Docker image
-        run: |
-          export VERSION=$(node -p "require('./apps/web/package.json').version")
-          docker build -t ${{ secrets.DOCKER_REPO_WEB }}:$VERSION -f apps/web/Dockerfile .
-          docker tag ${{ secrets.DOCKER_REPO_WEB }} ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
-          docker push ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_REPO_WEB }}:${{ env.VERSION }} -f apps/web/Dockerfile .
+
+      - name: Tag Docker image with version
+        run: docker tag ${{ secrets.DOCKER_REPO_WEB }}:${{ env.VERSION }} ${{ secrets.DOCKER_REPO_WEB }}:${{ env.VERSION }}
+
+      - name: Tag Docker image as latest
+        run: docker tag ${{ secrets.DOCKER_REPO_WEB }}:${{ env.VERSION }} ${{ secrets.DOCKER_REPO_WEB }}:latest
+
+      - name: Push Docker image with version
+        run: docker push ${{ secrets.DOCKER_REPO_WEB }}:${{ env.VERSION }}
+
+      - name: Push Docker image as latest
+        run: docker push ${{ secrets.DOCKER_REPO_WEB }}:latest
 
       - name: Set environment for production
         if: github.ref == 'refs/heads/main'
