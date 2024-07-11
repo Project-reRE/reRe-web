@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/labeler@v2
         with:
-          repo-token: ${{ secrets.GIT_TOKEN }}
+          token: ${{ secrets.GIT_TOKEN }}
 
   build:
     name: Build and Deploy Web
