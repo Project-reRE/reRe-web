@@ -75,6 +75,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
+          env: PORT:3000
           script: |
             export VERSION=$(node -p "require('./package.json').version")
             docker pull ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
