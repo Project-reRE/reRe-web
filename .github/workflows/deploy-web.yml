@@ -78,6 +78,6 @@ jobs:
           script: |
             export VERSION=$(node -p "require('./package.json').version")
             docker pull ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
-            cd /path/to/your/project  # 프로젝트 루트로 이동
+            cd ${{ secrets.DOCKER_REPO_WEB }} # 프로젝트 루트로 이동
             docker-compose --env-file $ENV_FILE up -d
             docker restart nginx  # Nginx 컨테이너를 재시작하여 새로운 설정 반영
