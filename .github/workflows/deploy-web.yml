@@ -95,7 +95,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.AWS_PEM_KEY }}
-          port: 80
+          port: ${{ secrets.PORT }}
           script: |
             export VERSION=$(node -p "require('./package.json').version")
             docker pull ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
