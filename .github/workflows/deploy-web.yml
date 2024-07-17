@@ -102,3 +102,10 @@ jobs:
             cd ${{ secrets.DOCKER_REPO_WEB }} # 프로젝트 루트로 이동
             docker-compose --env-file $ENV_FILE up -d
             docker restart nginx  # Nginx 컨테이너를 재시작하여 새로운 설정 반영
+
+      - name: Remove Github Actions IP From Security Group
+        run: |
+          aws ec2 revoke-security-group-ingress \ 
+          --group-id ${{ secrets.AWS_SG_ID }} \
+          --protocol tcp --port 22 \
+          --cidr ${{ steps.ip.outputs.ipv4 }}/32
