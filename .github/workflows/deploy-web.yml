@@ -70,12 +70,12 @@ jobs:
         run: echo "ENV_FILE=.env.development" >> $GITHUB_ENV
 
       - name: SSH to EC2 and deploy Web
-        uses: appleboy/ssh-action@v0.1.2
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          env: PORT:3000
+          port: 3000
           script: |
             export VERSION=$(node -p "require('./package.json').version")
             docker pull ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
