@@ -18,6 +18,7 @@ const AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }: any) {
       const res = await http.get('/auth/kakao', { 'kakao-token': account.access_token });
+      console.log(account.access_token);
       return true; // true를 반환하면 로그인이 허용됨
     },
     async redirect({ url, baseUrl }: any) {
