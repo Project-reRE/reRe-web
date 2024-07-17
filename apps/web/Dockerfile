@@ -9,6 +9,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # 2단계: next.js 빌드 단계
 RUN apk update
 RUN pnpm add -g turbo
+RUN pnpm install --global pm2
 
 # Set working directory
 WORKDIR /app
