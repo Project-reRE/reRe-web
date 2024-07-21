@@ -58,8 +58,12 @@ function Header() {
             </li>
           </ul>
         </nav>
-        <div className="w-[240px] border border-white px-2.5 py-1.5">
-          <input type="text" placeholder="재평가하고 싶은 영화가 있나요?" />
+        <div className="border border-white px-2.5 py-1.5">
+          <input
+            type="text"
+            placeholder="개봉한지 5년이 지난 재평가가 필요한 영화를 찾아보세요"
+            className="text-Gray60 text-sm font-medium"
+          />
         </div>
       </header>
     </>

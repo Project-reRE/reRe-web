@@ -2,12 +2,15 @@
   "name": "@repo/ui",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     "./article": "./src/article.tsx",
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
-    "./topBannerSlider": "./src/topBannerSlider.tsx"
+    "./topBannerSlider": "./src/topBannerSlider.tsx",
+    "./rankingMovie": "./src/RankingMovie.tsx",
+    "./rankingHeadCategory": "./src/RankingHeadCategory.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -17,6 +20,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
+    "@repo/icon": "workspace:*",
     "@turbo/gen": "^1.12.4",
     "@types/eslint": "^8.56.5",
     "@types/node": "^20.11.24",
