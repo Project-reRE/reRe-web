@@ -10,6 +10,7 @@
     "./code": "./src/code.tsx",
     "./topBannerSlider": "./src/topBannerSlider.tsx",
     "./rankingMovie": "./src/RankingMovie.tsx",
+    "./movieItem": "./src/MovieItem.tsx",
     "./rankingHeadCategory": "./src/RankingHeadCategory.tsx"
   },
   "scripts": {
