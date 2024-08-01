@@ -1,18 +1,10 @@
 {
-  "name": "@repo/ui",
+  "name": "@repo/icon",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
-    "./article": "./src/article.tsx",
-    "./button": "./src/button.tsx",
-    "./card": "./src/card.tsx",
-    "./code": "./src/code.tsx",
-    "./topBannerSlider": "./src/topBannerSlider.tsx",
-    "./rankingMovie": "./src/RankingMovie.tsx",
-    "./movieItem": "./src/MovieItem.tsx",
-    "./rankingHeadCategory": "./src/RankingHeadCategory.tsx",
-    "./footer": "./src/Footer.tsx"
+    ".": "./src/index.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -22,7 +14,6 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
-    "@repo/icon": "workspace:*",
     "@turbo/gen": "^1.12.4",
     "@types/eslint": "^8.56.5",
     "@types/node": "^20.11.24",
@@ -30,7 +21,6 @@
     "@types/react-dom": "^18.2.19"
   },
   "dependencies": {
-    "keen-slider": "^6.8.6",
     "react": "^18.2.0"
   }
 }

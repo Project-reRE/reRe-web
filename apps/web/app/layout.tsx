@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`bg-background-gray-10 h-full w-full`}>
+      <body className={`bg-Background m-auto h-full w-full min-w-[1152px] max-w-[1152px]`}>
         <Providers>
           <Header />
           {children}

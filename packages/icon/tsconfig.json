@@ -9,6 +9,6 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["src", "postcss.config.js", "tailwind.config.ts", "custom.d.ts", "assets"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

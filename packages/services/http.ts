@@ -40,7 +40,6 @@ class RequestInterceptors {
       requestUrl += '?' + new URLSearchParams(params).toString();
     }
     const res = await fetch(requestUrl, { method: 'GET', ...this.#config }).then((res) => res.json());
-
     return res;
   }
 

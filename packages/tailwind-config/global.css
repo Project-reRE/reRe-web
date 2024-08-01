@@ -41,5 +41,7 @@
   textarea,
   select {
     font: inherit;
+    background: transparent;
+    outline: none;
   }
 }
