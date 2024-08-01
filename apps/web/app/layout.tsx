@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '../global.css';
 import Header from 'components/header';
 import Providers from 'components/Provider';
+import Footer from '@repo/ui/footer';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,6 +22,7 @@ export default function RootLayout({
           {children}
         </Providers>
       </body>
+      <Footer />
     </html>
   );
 }
