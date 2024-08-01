@@ -7,12 +7,12 @@ import RankingMovie from '@repo/ui/rankingMovie';
 import RankingHeadCategory from '@repo/ui/rankingHeadCategory';
 
 export default async function RankingPage() {
-  // const bannerData = await http.get('/open-banners');
-  // const movieData = await http.get('/open-movie-sets');
+  const bannerData = await http.get('/open-banners');
+  const movieData = await http.get('/open-movie-sets');
 
   return (
     <>
-      {/* <TopBannerSlider items={bannerData.results} /> */}
+      <TopBannerSlider items={bannerData.results} />
       <section className="px-[42px]">
         <div className="flex flex-col gap-[32px]">
           <div className="flex flex-col items-start justify-start gap-[8px]">
