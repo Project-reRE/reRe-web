@@ -13,14 +13,13 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "start-pm2:dev": "pm2 start ecosystem.config.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
-    ],
-    "package.json": [
-      "pnpm lint:package"
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --config ./.prettierrc --write -u"
     ]
   },
   "devDependencies": {
@@ -33,7 +32,8 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "turbo": "^2.0.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.49.2",
