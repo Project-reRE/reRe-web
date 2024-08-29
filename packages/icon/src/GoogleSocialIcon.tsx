@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SVGProps, Ref, forwardRef } from 'react';
+import { Ref, SVGProps, forwardRef } from 'react';
 
 const GoogleSocialIcon = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
   <svg
