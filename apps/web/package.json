@@ -13,13 +13,16 @@
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.16.6",
     "@repo/ui": "workspace:*",
+    "date-fns": "^3.6.0",
     "keen-slider": "^6.8.6",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522"
+    "react-dom": "19.0.0-rc-f994737d14-20240522",
+    "react-hook-form": "^7.53.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

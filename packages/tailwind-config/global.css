@@ -44,4 +44,10 @@
     background: transparent;
     outline: none;
   }
+
+  input[type='checkbox'],
+  input[type='radio'],
+  label {
+    cursor: pointer;
+  }
 }

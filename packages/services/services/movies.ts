@@ -1,34 +1,74 @@
+import { UseQueryResult, usePrefetchQuery, useQuery } from '@tanstack/react-query';
+
 import http from '@repo/http';
-import { usePrefetchQuery, useQuery, UseQueryResult } from '@tanstack/react-query';
+
 import { GetListType } from './common';
+import { EmotionStatisticsType, MovieSpecialPointStatisticsType } from './revaluations';
+
+export type DirectorType = {
+  directorNm: string;
+  directorEnNm: string;
+  directorId: string;
+};
+
+export type ActorType = {
+  actorNm: string;
+  actorEnNm: string;
+  actorId: string;
+};
+
+export interface MovieDataType {
+  title: string;
+  genre: string;
+  repRlsDate: string;
+  directors: DirectorType[];
+  actors: ActorType[];
+  posters: string[];
+  stills: string[];
+}
+
+export interface MovieStatisticsType {
+  id: string;
+  numRecentStars: {
+    targetDate: string;
+    numStars: number;
+  }[];
+  numStars: number;
+  numStarsParticipants: number;
+  numSpecialPoint: MovieSpecialPointStatisticsType;
+  numPastValuation: EmotionStatisticsType;
+  numPresentValuation: EmotionStatisticsType;
+  numGender: {
+    MALE: number;
+    FEMALE: number;
+  };
+  numAge: {
+    TEENS: number;
+    TWENTIES: number;
+    THIRTIES: number;
+    FORTIES: number;
+    FIFTIES_PLUS: number;
+  };
+  targetDate: string;
+  // movie: null;
+}
 
 export interface MovieResponseDto {
   id: string;
-  data: {
-    title: string;
-    genre: string;
-    repRlsDate: string;
-    directors: {
-      directorNm: string;
-      directorEnNm: string;
-      directorId: string;
-    }[];
-    actors: {
-      actorNm: string;
-      actorEnNm: string;
-      actorId: string;
-    }[];
-    posters: ['Unknown Type: http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPK021861.jpg'];
-    stlls: ['Unknown Type: http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840308.jpg'];
-  };
+  data: MovieDataType;
+  statistics: MovieStatisticsType[];
 }
 
 export interface OpenMovieSetResponseDto {
+  genre: string;
   title: string;
   template: string;
   displayOrder: number;
   condition: string;
-  data: MovieResponseDto[];
+  data: {
+    id: string;
+    data: MovieDataType;
+  }[];
 }
 
 export const useGetOpenMovieSets = () =>

@@ -1,7 +1,9 @@
 'use client';
 
 import React, { HTMLAttributes } from 'react';
+
 import { signIn } from 'next-auth/react';
+
 import { AppleSocialIcon, GoogleSocialIcon, KakaoSocialIcon, LogoIcon } from '@repo/icon';
 
 const EmptyBox = () => (

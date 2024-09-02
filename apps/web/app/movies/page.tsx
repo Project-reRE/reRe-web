@@ -1,13 +1,17 @@
 'use client';
 
-import RankingMovie from '@repo/ui/rankingMovie';
-import RankingHeadCategory from '@repo/ui/rankingHeadCategory';
-import { useSearchParams } from 'next/navigation';
-import MovieItem from '@repo/ui/movieItem';
-import { OpenMovieSetResponseDto, useGetMovies, useGetOpenBanner, useGetOpenMovieSets } from '@repo/services';
 import Link from 'next/link';
-import { PATH } from 'constant/path';
+import { useSearchParams } from 'next/navigation';
+
+import { OpenMovieSetResponseDto, useGetMovies, useGetOpenBanner, useGetOpenMovieSets } from '@repo/services';
+import { ColorMap } from '@repo/tailwind-config/theme';
+import MovieItem from '@repo/ui/movieItem';
+import RankingHeadCategory from '@repo/ui/rankingHeadCategory';
+import RankingMovie from '@repo/ui/rankingMovie';
+
 import TopBannerSlider from 'components/TopBannerSlider';
+
+import { PATH } from 'constant/path';
 
 const RankingPage = () => {
   const searchParams = useSearchParams();
@@ -37,11 +41,11 @@ const RankingPage = () => {
             <div className="flex flex-col gap-[48px]">
               <article className="flex flex-col gap-[14px]">
                 <ul className="flex flex-wrap gap-x-[24px] gap-y-[24px]">
-                  {moviesData.results?.map((movie) => {
+                  {moviesData.results?.map(({ id, data }) => {
                     return (
-                      <li key={movie.id}>
-                        <Link href={PATH.MOVIES + `/${movie.id}`}>
-                          <MovieItem item={movie} />
+                      <li key={id}>
+                        <Link href={PATH.MOVIES + `/${id}`}>
+                          <MovieItem data={data} />
                         </Link>
                       </li>
                     );
@@ -66,24 +70,33 @@ const RankingPage = () => {
                 <div className="text-Gray70 text-lg font-normal">가장 많이 재평가받은 장르별 영화 TOP 3</div>
               </div>
               {openMovieSetData &&
-                openMovieSetData.results.map((data: OpenMovieSetResponseDto) => (
-                  <div className="flex flex-col gap-[48px]">
+                openMovieSetData.results.map((data: OpenMovieSetResponseDto, idx: number) => (
+                  <div className="flex flex-col gap-[48px]" key={idx}>
                     <article className="flex flex-col gap-[14px]">
-                      <RankingHeadCategory data={data} />
+                      <RankingHeadCategory
+                        data={data}
+                        color={
+                          [
+                            { bgColor: ColorMap.Orange40, textColor: ColorMap.Orange90, titleColor: ColorMap.Orange60 },
+                            { bgColor: ColorMap.Green40, textColor: ColorMap.Green80, titleColor: ColorMap.Green70 },
+                            { bgColor: ColorMap.Cyan50, textColor: ColorMap.Cyan90, titleColor: ColorMap.Cyan60 },
+                          ][idx % 3]
+                        }
+                      />
                       <ul className="flex justify-between">
                         <li>
                           <Link href={PATH.MOVIES + `/${data.data[0]?.id}`}>
-                            <RankingMovie item={data.data[0]} rankingNumber={1} />
+                            <RankingMovie data={data.data[0]?.data} rankingNumber={1} />
                           </Link>
                         </li>
                         <li>
                           <Link href={PATH.MOVIES + `/${data.data[1]?.id}`}>
-                            <RankingMovie item={data.data[1]} rankingNumber={2} />
+                            <RankingMovie data={data.data[1]!.data} rankingNumber={2} />
                           </Link>
                         </li>
                         <li>
                           <Link href={PATH.MOVIES + `/${data.data[2]?.id}`}>
-                            <RankingMovie item={data.data[2]} rankingNumber={3} />
+                            <RankingMovie data={data.data[2]?.data} rankingNumber={3} />
                           </Link>
                         </li>
                       </ul>

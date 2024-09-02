@@ -1,9 +1,10 @@
 import React from 'react';
+
 import { LINK } from '../constant/link';
 
 const Footer = () => {
   return (
-    <div className="mt-[140px] flex w-full flex-col items-center justify-center gap-10 bg-[#141414] pb-10">
+    <footer className="container relative bottom-0 mt-[140px] flex w-full flex-col items-center justify-center gap-10 bg-[#141414] pb-10">
       <div className="h-px self-stretch bg-[#444444]" />
       <div className="flex h-[84px] flex-col items-center justify-start gap-3 self-stretch">
         <ul className="flex items-start justify-start gap-4">
@@ -22,7 +23,7 @@ const Footer = () => {
         </a>
         <p className="text-Gray70 text-sm font-normal leading-tight">Copyright © reRE 2024. All Rights Reserved.</p>
       </div>
-    </div>
+    </footer>
   );
 };
 

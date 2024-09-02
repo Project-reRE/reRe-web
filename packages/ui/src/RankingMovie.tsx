@@ -1,13 +1,16 @@
 import MovieItem from 'MovieItem.tsx';
-import '../index.css';
+
 import { Ranking1, Ranking2, Ranking3 } from '@repo/icon';
+import { MovieDataType, MovieResponseDto } from '@repo/services';
+
+import '../index.css';
 
 type Props = {
-  item: any;
+  data?: MovieDataType;
   rankingNumber: number;
 };
 
-const RankingMovie = ({ item, rankingNumber }: Props) => {
+const RankingMovie = ({ data, rankingNumber }: Props) => {
   const RankingNumberIcon = () => {
     switch (rankingNumber) {
       case 1:
@@ -18,7 +21,8 @@ const RankingMovie = ({ item, rankingNumber }: Props) => {
         return <Ranking3 />;
     }
   };
-  return <MovieItem children={<RankingNumberIcon />} />;
+  if (!data) return <></>;
+  return <MovieItem children={<RankingNumberIcon />} data={data} />;
 };
 
 export default RankingMovie;
