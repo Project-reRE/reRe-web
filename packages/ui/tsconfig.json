@@ -1,8 +1,14 @@
 {
   "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": "src",
+    "paths": {
+      "*": ["*"]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
-  "include": ["src"],
+  "include": ["src", "postcss.config.js", "tailwind.config.ts", "custom.d.ts", "assets"],
   "exclude": ["node_modules", "dist"]
 }

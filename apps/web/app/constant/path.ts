@@ -1,7 +1,9 @@
 export const PATH = {
   MAIN: '/',
   SIGN_IN: '/sign-in',
-  MOVIE: '/movie',
+  MOVIES: '/movies',
   LIBRARY: '/library',
   MUSIC: '/music',
+  HISTORY: '/history',
+  RANKING: '/ranking',
 } as const;

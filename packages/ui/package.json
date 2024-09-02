@@ -2,12 +2,21 @@
   "name": "@repo/ui",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     "./article": "./src/article.tsx",
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
-    "./topBannerSlider": "./src/topBannerSlider.tsx"
+    "./topBannerSlider": "./src/topBannerSlider.tsx",
+    "./rankingMovie": "./src/RankingMovie.tsx",
+    "./movieItem": "./src/MovieItem.tsx",
+    "./rankingHeadCategory": "./src/RankingHeadCategory.tsx",
+    "./footer": "./src/Footer.tsx",
+    "./ModalBody": "./src/ModalBody.tsx",
+    "./ReviewCard": "./src/ReviewCard.tsx",
+    "./SimpleAreaChart": "./src/SimpleAreaChart.tsx",
+    "./SimpleBarChart": "./src/SimpleBarChart.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -15,8 +24,10 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@repo/icon": "workspace:*",
+    "@repo/services": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@turbo/gen": "^1.12.4",
     "@types/eslint": "^8.56.5",
     "@types/node": "^20.11.24",
@@ -25,6 +36,7 @@
   },
   "dependencies": {
     "keen-slider": "^6.8.6",
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "recharts": "2.13.0-alpha.4"
   }
 }
