@@ -10,12 +10,6 @@ on:
       - '.github/workflows/deploy-web.yml'
       - 'docker-compose.yml'
       - 'ecosystem.config.js'
-  pull_request:
-    branches:
-      - main
-      - development
-    paths:
-      - 'apps/web/**'
 
 jobs:
   build:
