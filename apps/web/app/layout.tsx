@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 
 import type { Metadata } from 'next';
 
@@ -19,10 +19,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  // pageProps,
+  modal,
 }: Readonly<{
-  children: ReactElement;
-  // pageProps: any;
+  children: ReactNode;
+  modal: ReactNode;
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
@@ -31,7 +31,7 @@ export default function RootLayout({
           <>
             <Header />
             {children}
-            {/* {cloneElement(children, pageProps)} */}
+            {modal}
             <Footer />
           </>
         </Providers>
