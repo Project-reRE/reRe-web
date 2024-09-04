@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const MovieDetailPage = async ({ params }: Props) => {
-  const { data, statistics } = await getFindOneMovie(params.movieId);
+  const data = await getFindOneMovie(params.movieId);
 
   return (
     <>
-      <MovieBanner data={data} statistics={statistics} />
+      <MovieBanner data={data.data} statistics={data.statistics} />
       <MovieDetailInformation data={data} />
     </>
   );
