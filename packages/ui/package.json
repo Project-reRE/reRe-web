@@ -16,7 +16,10 @@
     "./ModalBody": "./src/ModalBody.tsx",
     "./ReviewCard": "./src/ReviewCard.tsx",
     "./SimpleAreaChart": "./src/SimpleAreaChart.tsx",
-    "./SimpleBarChart": "./src/SimpleBarChart.tsx"
+    "./SimpleBarChart": "./src/SimpleBarChart.tsx",
+    "./EmotionRankCard": "./src/EmotionRankCard.tsx",
+    "./ValuationTotalCard": "./src/ValuationTotalCard.tsx",
+    "./PieCharts": "./src/PieCharts.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
