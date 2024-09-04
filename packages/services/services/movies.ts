@@ -27,29 +27,38 @@ export interface MovieDataType {
   stills: string[];
 }
 
+export interface NumRecentStarType {
+  currentDate: string;
+  numStars: number;
+}
+
+export type AgeType = {
+  TEENS: number;
+  TWENTIES: number;
+  THIRTIES: number;
+  FORTIES: number;
+  FIFTIES_PLUS: number;
+};
+
+export type GenderType = {
+  TEENS: number;
+  TWENTIES: number;
+  THIRTIES: number;
+  FORTIES: number;
+  FIFTIES_PLUS: number;
+};
+
 export interface MovieStatisticsType {
   id: string;
-  numRecentStars: {
-    targetDate: string;
-    numStars: number;
-  }[];
+  numRecentStars: NumRecentStarType[];
   numStars: number;
   numStarsParticipants: number;
   numSpecialPoint: MovieSpecialPointStatisticsType;
   numPastValuation: EmotionStatisticsType;
   numPresentValuation: EmotionStatisticsType;
-  numGender: {
-    MALE: number;
-    FEMALE: number;
-  };
-  numAge: {
-    TEENS: number;
-    TWENTIES: number;
-    THIRTIES: number;
-    FORTIES: number;
-    FIFTIES_PLUS: number;
-  };
-  targetDate: string;
+  numGender: GenderType;
+  numAge: AgeType;
+  currentDate: string;
   // movie: null;
 }
 
