@@ -20,9 +20,13 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
   modal,
+  history,
+  ranking,
 }: Readonly<{
   children: ReactNode;
   modal: ReactNode;
+  history: ReactNode;
+  ranking: ReactNode;
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
@@ -30,8 +34,12 @@ export default function RootLayout({
         <Providers>
           <>
             <Header />
-            {children}
-            {modal}
+            <main>
+              {children}
+              {modal}
+              {history}
+              {ranking}
+            </main>
             <Footer />
           </>
         </Providers>

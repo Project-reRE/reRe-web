@@ -1,5 +1,6 @@
-import http from '@repo/http';
 import { useQuery } from '@tanstack/react-query';
+
+import http from '@repo/http';
 
 export interface MyProfileResponseDto {
   id: string;
@@ -17,10 +18,12 @@ export interface MyProfileResponseDto {
   deletedAt?: string;
 }
 
+export const getMyProfile = async () => await http.get<MyProfileResponseDto>('/my/profile');
+
 export const useGetMyProfile = () =>
   useQuery({
     queryKey: ['myProfile'],
-    queryFn: () => http.get<MyProfileResponseDto>('/my/profile'),
+    queryFn: () => getMyProfile(),
     staleTime: Infinity,
     gcTime: Infinity,
   });

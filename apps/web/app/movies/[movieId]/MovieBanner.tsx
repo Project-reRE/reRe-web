@@ -28,13 +28,15 @@ const MovieBanner = ({ data, statistics }: Props) => {
         src={data.stills?.[0] ?? data.posters?.[0] ?? ''}
         className="absolute left-0 top-0 z-[-2] h-[594px] w-full bg-gradient-to-b blur-xl"
         alt={data.title + '스틸 이미지'}
-        width={0}
-        height={594}
+        fill
         style={{ width: '100%', maxHeight: 594 }}
+        placeholder="empty"
       />
       <div className="mb-[60px] flex items-center justify-center gap-[28px]">
         <div className="relative">
-          <Image src={data.posters[0] ?? ''} alt={data.title + '포스터 이미지'} width={260} height={390} />
+          <figure style={{ width: 260, height: 390 }}>
+            <Image src={data.posters[0] ?? ''} alt={data.title + '포스터 이미지'} fill placeholder="empty" />
+          </figure>
           <span className="absolute bottom-[-24px] text-xs text-[#777777]">출처 : KMdb</span>
         </div>
         <div className="flex flex-col gap-[26px]">

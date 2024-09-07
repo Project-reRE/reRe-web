@@ -1,9 +1,7 @@
-import NextAuth, { Awaitable, CallbacksOptions, Session } from 'next-auth';
+import { Session } from 'next-auth';
 import KakaoProvider from 'next-auth/providers/kakao';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { OAuthConfig } from 'next-auth/providers/oauth';
+
 import http from './http';
-import { SignInResponse } from 'next-auth/react';
 
 const refreshAccessToken = async (token: string) => {};
 
@@ -26,49 +24,62 @@ const AuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile, email, credentials }: any) {
-      const res = await http.get<{ jwt: string }>('/auth/kakao', {
-        'kakao-token': account.access_token,
-      });
-      console.log(account, res);
-      if (res) {
-        this.jwt({ token: res.jwt, account, user });
-      }
-      // if ((res as any)?.statusCode > 200) throw new Error(JSON.stringify(res));
-
       return true; // true를 반환하면 로그인이 허용됨
     },
+
+    // 1. jwt 콜백에서 API의 JWT를 받아와 저장
     async jwt({ token, account, user }: any) {
-      console.log('토긑', account);
       if (account && user) {
         token.accessToken = account.access_token;
-        token.accessTokenExpires = account.expires_at * 1000;
-        token.refreshToken = account.refresh_token;
 
-        return token;
+        console.log(account.access_token);
+
+        if (user) {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/kakao`, {
+            method: 'GET',
+            headers: {
+              'kakao-token': `${account.access_token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          const { jwt } = await response.json();
+          // API에서 받아온 JWT를 token 객체에 저장
+
+          return { ...token, jwtToken: jwt }; // 반환된 token은 session 콜백에서 사용됨
+        }
       }
 
-      const nowTime = Date.now();
-      const accessTokenExpires = token.accessTokenExpires as number;
-      const TEN_MINUTES_AGO_IN_MS = 60 * 10 * 1000; // 10분
-
-      const shouldRefreshTime = accessTokenExpires - nowTime - TEN_MINUTES_AGO_IN_MS;
-
-      if (shouldRefreshTime > 0) {
-        return token;
-      }
-
-      return refreshAccessToken(token);
+      return token;
     },
 
-    async session({ session, token }: any) {
-      const sessionUser = {
-        ...token,
-      };
+    // 2. session 콜백에서 jwt를 세션에 포함
+    async session({ session, token }: { session: Session; token: any }) {
+      console.log(session, token.jwtToken);
 
-      delete sessionUser.refreshToken;
-      session.user = sessionUser as any;
+      if (token.jwtToken) {
+        http.headerInit(token.jwtToken);
+      }
 
-      return session;
+      if (session && !token.jwtToken) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/kakao`, {
+            method: 'GET',
+            headers: {
+              'kakao-token': `${token.accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const { jwt } = await response.json();
+          console.log('jwt 재발급', jwt);
+          http.headerInit(jwt);
+          return { ...session, token: jwt };
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      return { ...session, token: token.jwtToken };
     },
 
     async redirect({ url, baseUrl }: any) {

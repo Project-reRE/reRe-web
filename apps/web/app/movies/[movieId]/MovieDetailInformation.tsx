@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
@@ -9,7 +9,7 @@ import Tabs from '@mui/material/Tabs';
 import { addMonths, format, subMonths } from 'date-fns';
 
 import { ArrowIcon } from '@repo/icon';
-import { MovieResponseDto, useGetRevaluations } from '@repo/services';
+import { GetListType, MovieResponseDto, RevaluationResponseDto } from '@repo/services';
 import EmotionRankCard from '@repo/ui/EmotionRankCard';
 import PieCharts from '@repo/ui/PieCharts';
 import ReviewCard from '@repo/ui/ReviewCard';
@@ -20,7 +20,6 @@ import ValuationTotalCard from '@repo/ui/ValuationTotalCard';
 import { convertAgeTypeToKeyValueObjectArray } from 'utils/convertKeyValueObjectArray';
 
 import EmptyBlankView from 'components/EmptyBlankView';
-import ReportModalBody from 'components/ReportModalBody';
 import TabPanel from 'components/TabPanel';
 
 import { PATH } from 'constant/path';
@@ -28,32 +27,32 @@ import { PATH } from 'constant/path';
 type TabType = 'info' | 'review';
 
 type Props = {
-  data: MovieResponseDto;
+  movieData: MovieResponseDto;
+  revaluationData: GetListType<RevaluationResponseDto>;
 };
 
-const MovieDetailInformation = ({ data }: Props) => {
+const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
   const searchParams = useSearchParams();
   const tabValue = (searchParams.get('tabValue') as TabType) ?? 'info';
   const [tabState, setTabState] = useState<TabType>(tabValue);
   const router = useRouter();
   const params = useParams();
-
-  const { data: revaluationsData } = useGetRevaluations({ movieId: data.id });
+  const [isPending, startTransition] = useTransition();
 
   const currentDate = format(new Date(), 'yyyy-MM');
   const [monthData, setMonthData] = useState(currentDate);
-  const targetStatistics = useMemo(() => data.statistics.find((el) => el.currentDate === monthData), [data, monthData]);
+  const targetStatistics = useMemo(
+    () => movieData.statistics.find((el) => el.currentDate === monthData),
+    [movieData, monthData]
+  );
   const isNextButton = useMemo(() => !(currentDate <= monthData), [monthData]);
-  console.log(data);
-
-  // const [reviewResults, setReviewResults] = useState(data.)
 
   const handleChange = (_: React.SyntheticEvent, value: TabType) => {
     setTabState(value);
   };
 
   const handleClickRevaluation = () => {
-    router.push(PATH.MOVIES + `/${params.movieId}/revaluation`);
+    startTransition(() => router.push(PATH.MOVIES + `/${params.movieId}/revaluation`));
   };
 
   const handleClickPrevDate = useCallback(() => {
@@ -68,7 +67,7 @@ const MovieDetailInformation = ({ data }: Props) => {
   }, [monthData]);
 
   const handleClickGoMovieButton = () => {
-    window.open(`https://serieson.naver.com/v3/search?query=${data.data.title}`);
+    window.open(`https://serieson.naver.com/v3/search?query=${movieData.data.title}`);
   };
 
   return (
@@ -87,7 +86,7 @@ const MovieDetailInformation = ({ data }: Props) => {
           <Tab label="재평가 정보" value={'info'} sx={{ width: 80, padding: '13px 0 10px' }} disableRipple />
           <Tab label="다른 평보기" value={'review'} sx={{ width: 80, padding: '13px 0 10px' }} disableRipple />
         </Tabs>
-        {targetStatistics ? (
+        {targetStatistics && revaluationData ? (
           <>
             <TabPanel value={tabState} active={'info'} className="flex flex-col items-center gap-[32px]">
               <div className="flex w-full flex-wrap gap-[10px]">
@@ -109,14 +108,15 @@ const MovieDetailInformation = ({ data }: Props) => {
                 영화 보러가기
               </button>
               <div className="flex w-full flex-wrap gap-[10px]">
-                <ValuationTotalCard />
+                <ValuationTotalCard
+                  numStarsParticipants={targetStatistics.numStarsParticipants}
+                  currentMonth={format(monthData, 'M')}
+                />
                 <PieCharts data={convertAgeTypeToKeyValueObjectArray(targetStatistics.numAge)} />
               </div>
             </TabPanel>
             <TabPanel value={tabState} active={'review'} className="grid grid-cols-2 gap-[16px]">
-              <ReviewCard />
-              <ReviewCard />
-              {/* {revaluationsData?.results.map((item) => <ReviewCard item={item} key={item.id} />)} */}
+              {revaluationData?.results.map((item) => <ReviewCard item={item} key={item.id} />)}
             </TabPanel>
             <button
               className="bg-Orange50 h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"
@@ -134,13 +134,13 @@ const MovieDetailInformation = ({ data }: Props) => {
                 className="bg-Orange50 mt-[48px] h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"
                 onClick={handleClickRevaluation}
               >
-                재평가하기
+                재평가하기 {isPending && <span>이동중</span>}
               </button>
             }
           />
         )}
 
-        <ReportModalBody />
+        {/* <ReportModalBody /> */}
       </div>
     </>
   );

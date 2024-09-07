@@ -1,32 +1,33 @@
-'use client';
-
 import React from 'react';
 
-import { useQuery } from '@tanstack/react-query';
-import http from 'http';
+import { Metadata } from 'next';
 
-import { useGetMyProfile } from '../../../../../packages/services/services/users';
+import { getMyProfile, useGetMyProfile } from '@repo/services';
 
-const MyProfilePage = () => {
-  const { data: myProfileData } = useGetMyProfile();
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getMyProfile();
 
-  const handleClickEmail = () => {
-    // pevelopment@gmail.com
+  return {
+    title: data?.nickName,
   };
+}
 
-  console.log(myProfileData);
+const MyProfilePage = async () => {
+  // const { data, error } = useGetMyProfile();
+  const data = await getMyProfile();
+  console.log(data);
 
   return (
-    <div className="flex flex-col gap-[64px]">
+    <section className="layout center flex max-w-[952px] flex-col gap-[64px]">
       <div className="flex gap-[24px]">
         <div className="h-[150px] w-[150px] rounded-full bg-[#d9d9d9]" />
         <div className="flex flex-col gap-[18px]">
           <div className="flex flex-col gap-[8px]">
-            <p className="text-[28px] font-medium text-white">{myProfileData?.nickName}</p>
-            <div className="text-base font-normal text-[#cccccc]">남성 1985년생</div>
-            <div className="text-Orange50 text-lg font-medium">재평가한 콘텐츠 수 : 000,000,000개</div>
+            <p className="text-[28px] font-medium text-white">{data?.nickName}</p>
+            <div className="text-base font-normal text-[#cccccc]">남성 {data?.birthDate}년생</div>
+            <div className="text-Orange50 text-lg font-medium">재평가한 콘텐츠 수 : {data?.statistics ?? 0}개</div>
           </div>
-          <div className="text-base font-normal text-[#cccccc]">gihoikja@naver.com</div>
+          <div className="text-base font-normal text-[#cccccc]">{data?.email}</div>
         </div>
       </div>
       <div>
@@ -42,9 +43,7 @@ const MyProfilePage = () => {
               자주 묻는 질문과 답변보기
             </a>
           </li>
-          <li className="text-Gray80 py-[24px] text-xl font-medium" onClick={handleClickEmail}>
-            이메일로 문의하기
-          </li>
+          <li className="text-Gray80 py-[24px] text-xl font-medium">이메일로 문의하기</li>
         </ul>
       </div>
       <div>
@@ -83,7 +82,7 @@ const MyProfilePage = () => {
         </button>
         <button className="text-Gray40 text-center text-xl font-medium">회원 탈퇴하기</button>
       </div>
-    </div>
+    </section>
   );
 };
 

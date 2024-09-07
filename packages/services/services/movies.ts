@@ -99,7 +99,7 @@ export const useGetMovies = ({ title }: { title: string }): UseQueryResult<GetLi
 export const getFindOneMovie = async (movieId: string) => await http.get<MovieResponseDto>(`/movies/${movieId}`);
 
 export const useGetFindOneMovie = (movieId: string) =>
-  usePrefetchQuery({
+  useQuery({
     queryKey: ['movie', movieId],
     queryFn: () => getFindOneMovie(movieId),
     staleTime: 1000 * 60 * 5,

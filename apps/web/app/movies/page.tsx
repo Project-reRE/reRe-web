@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -21,11 +23,10 @@ const RankingPage = () => {
   const { data: openBannersData } = useGetOpenBanner();
   const { data: openMovieSetData } = useGetOpenMovieSets();
 
-  // todo : 스켈레톤
-  if (moviesData?.results?.length === 0) return <></>;
+  console.log(moviesData);
 
   return (
-    <>
+    <Suspense fallback={<div className="h-[100px] bg-yellow-50">로딩중</div>}>
       {moviesData && !!search ? (
         <section className="layout px-[42px] py-[32px]">
           <div className="flex flex-col gap-[32px]">
@@ -107,7 +108,7 @@ const RankingPage = () => {
           </section>
         </>
       )}
-    </>
+    </Suspense>
   );
 };
 

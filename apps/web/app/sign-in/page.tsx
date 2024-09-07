@@ -19,7 +19,7 @@ function SignInPage() {
     'flex h-[52px] w-[360px] items-center justify-between rounded-lg px-5 py-3.5 ' as HTMLAttributes<HTMLElement>['className'];
 
   return (
-    <div className="flex min-h-[calc(100vh-103px-165px)] flex-col items-center justify-center gap-[76px]">
+    <div className="layout flex min-h-[calc(100vh-103px-165px)] flex-col items-center justify-center gap-[76px]">
       <div>
         <span className="text-base font-semibold leading-relaxed text-white">그거, 지금 봐도 재밌을까?</span>
         <LogoIcon />

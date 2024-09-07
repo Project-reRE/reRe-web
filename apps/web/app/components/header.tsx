@@ -6,7 +6,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { LogoIcon, SearchIcon } from '@repo/icon';
+import { LogoIcon, MyIcon, SearchIcon } from '@repo/icon';
 
 import { PATH } from 'constant/path';
 
@@ -34,7 +34,7 @@ function Header() {
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!searchValue) return;
-    if (e.key === 'Enter') return router.push(`?search=${searchValue}`);
+    if (e.key === 'Enter') return router.push(`${PATH.MOVIES}?search=${searchValue}`);
   };
 
   return (
@@ -68,22 +68,27 @@ function Header() {
           </ul>
         </nav>
         {isLogin ? (
-          <button onClick={handleClickSignOut}>로그아웃</button>
+          <>
+            <button onClick={handleClickSignOut}>로그아웃</button>
+            <Link href={PATH.MY} className="h-fit">
+              <MyIcon />
+            </Link>
+          </>
         ) : (
           <Link href={PATH.SIGN_IN} className="text-base">
             로그인
           </Link>
         )}
       </div>
-      <div className="flex w-full justify-between p-4 text-white">
+      <div className="flex w-full justify-between px-4 text-white">
         <nav>
           <ul className="flex h-full w-full gap-4 text-lg">
-            <li>
+            <li className="h-fit">
               <Link href={`?tab=ranking`} className={isActive(PATH.RANKING) ? activeStyle : ''}>
                 데일리 랭킹
               </Link>
             </li>
-            <li>
+            <li className="h-fit">
               <Link href={`?tab=history`} className={isActive(PATH.HISTORY) ? activeStyle : ''}>
                 히스토리
               </Link>
@@ -94,7 +99,7 @@ function Header() {
           <input
             type="text"
             placeholder="개봉한지 5년이 지난 재평가가 필요한 영화를 찾아보세요"
-            className="text-Gray60 w-[320px] text-sm font-medium"
+            className="placeholder:text-Gray60 text-White w-[320px] text-sm font-medium"
             onChange={handleChangeSearchInput}
             onKeyDown={handleSearch}
           />

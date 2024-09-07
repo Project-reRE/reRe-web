@@ -6,4 +6,5 @@ export const PATH = {
   MUSIC: '/music',
   HISTORY: '/history',
   RANKING: '/ranking',
+  MY: '/my',
 } as const;
