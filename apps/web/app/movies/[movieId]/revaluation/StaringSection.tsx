@@ -1,12 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import { StarIcon } from '@repo/icon';
+import { RevaluationRequestDto } from '@repo/services';
 
 import { StyledRating } from 'components/StyledRating';
 
-const StaringSection = () => {
+type Props = {
+  register: UseFormRegister<RevaluationRequestDto>;
+  inputField: keyof RevaluationRequestDto;
+  value: number;
+  setValue: UseFormSetValue<RevaluationRequestDto>;
+};
+
+const StaringSection = ({ setValue }: Props) => {
   const [ratingValue, setRatingValue] = useState(0);
 
   return (
@@ -19,7 +28,10 @@ const StaringSection = () => {
           icon={<StarIcon width={40} height={40} />}
           emptyIcon={<StarIcon fill="#919191" width={40} height={40} />}
           style={{ width: 'fit-content', gap: 10 }}
-          onChange={(_, value) => setRatingValue(value ?? 0)}
+          onChange={(_, value) => {
+            setRatingValue(value ?? 0);
+            setValue('numStars', value ?? 0);
+          }}
           sx={{
             '.MuiRating-iconFilled': {
               minWidth: 40,

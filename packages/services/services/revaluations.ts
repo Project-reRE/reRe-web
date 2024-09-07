@@ -1,4 +1,4 @@
-import { UseQueryResult, usePrefetchQuery, useQuery } from '@tanstack/react-query';
+import { UseQueryResult, useMutation, usePrefetchQuery, useQuery } from '@tanstack/react-query';
 
 import http from '@repo/http';
 
@@ -33,6 +33,18 @@ export interface RevaluationResponseDto {
   id: string;
 }
 
+export interface RevaluationRequestDto {
+  movieId: string;
+  numStars: number;
+  specialPoint: MovieSpecialPointStatisticsType;
+  pastValuation: EmotionStatisticsType;
+  presentValuation: EmotionStatisticsType;
+  comment: string;
+}
+
+export const getRevaluations = async ({ movieId }: { movieId: string }) =>
+  await http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId });
+
 export const useGetRevaluations = ({
   movieId,
   userId,
@@ -41,8 +53,8 @@ export const useGetRevaluations = ({
   userId?: string;
 }): UseQueryResult<GetListType<RevaluationResponseDto>> => {
   return useQuery({
-    queryKey: ['revaluations', movieId, userId],
-    queryFn: () => http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId, userId }),
+    queryKey: ['revaluations', movieId],
+    queryFn: () => http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId }),
     staleTime: 1000 * 60 * 5,
     enabled: !!movieId,
   });
@@ -59,4 +71,8 @@ export const useGetMyRevaluations = ({
     staleTime: 1000 * 60 * 5,
     enabled: !!movieId,
   });
+};
+
+export const usePostRevaluation = () => {
+  return useMutation({ mutationFn: (data: RevaluationRequestDto) => http.post('/revaluations', data) });
 };

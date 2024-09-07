@@ -10,12 +10,13 @@ type Props = {
 };
 
 const RevaluationCreatePage = async ({ params }: Props) => {
-  const { data } = await getFindOneMovie(params.movieId);
+  const movieId = params.movieId;
+  const data = await getFindOneMovie(movieId);
 
   return (
     <>
-      <MovieBanner data={data} />
-      <RevaluationInputs />
+      <MovieBanner data={data.data} statistics={data.statistics} />
+      <RevaluationInputs movieId={movieId} />
     </>
   );
 };

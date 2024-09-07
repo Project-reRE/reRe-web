@@ -1,9 +1,11 @@
 import React from 'react';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
+
+import { RevaluationRequestDto } from '@repo/services';
 
 type Props = {
-  register: UseFormRegister<FieldValues>;
-  inputField: string;
+  register: UseFormRegister<RevaluationRequestDto>;
+  inputField: keyof RevaluationRequestDto;
   title: string;
   value?: string;
   maxLength?: number;

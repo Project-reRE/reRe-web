@@ -1,14 +1,16 @@
 import React, { HTMLAttributes } from 'react';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
+
+import { RevaluationRequestDto } from '@repo/services';
 
 import { enumToArrayType } from 'utils/enumToArray';
 
 type Props = {
-  register: UseFormRegister<FieldValues>;
-  inputField: string;
+  register: UseFormRegister<RevaluationRequestDto>;
   title: string;
   buttonList: enumToArrayType;
-  selectedButton: string;
+  inputField: keyof RevaluationRequestDto;
+  selectedButton: any;
 };
 
 const ButtonSection = ({ register, inputField, title, buttonList, selectedButton }: Props) => {
