@@ -1,9 +1,11 @@
 import AppleSocialIcon from './AppleSocialIcon.tsx';
 import ArrowIcon from './ArrowIcon.tsx';
+import EmptyIcon from './EmptyIcon.tsx';
 import GoogleSocialIcon from './GoogleSocialIcon.tsx';
 import InfoIcon from './InfoIcon.tsx';
 import KakaoSocialIcon from './KakaoSocialIcon.tsx';
 import LogoIcon from './LogoIcon.tsx';
+import MyIcon from './MyIcon.tsx';
 import NegativeEmoji from './NegativeEmoji.tsx';
 import NotSureEmoji from './NotSureEmoji.tsx';
 import PositiveEmoji from './PositiveEmoji.tsx';
@@ -28,4 +30,6 @@ export {
   NegativeEmoji,
   NotSureEmoji,
   PositiveEmoji,
+  MyIcon,
+  EmptyIcon,
 };
