@@ -1,5 +1,4 @@
-import { Session } from 'next-auth';
-import { getSession } from 'next-auth/react';
+import { getCookie } from 'utils/cookie';
 
 const apiConfig = {
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -12,7 +11,7 @@ type fetchOptionType = apiConfigType & RequestInit;
 
 type ErrorMessageType = { statusCode: number; code: string; message: string[] };
 
-function createFormData(input: Record<string, any>): FormData {
+export function createFormData(input: Record<string, any>): FormData {
   return Object.keys(input || {}).reduce((formData, key) => {
     const property = input[key];
     formData.append(
@@ -31,21 +30,13 @@ class RequestInterceptors {
   #config = apiConfig as fetchOptionType;
   #headers = new Headers();
 
-  constructor() {
-    this.#config.baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    // this.#headers.append('Content-Type', 'application/json');
-  }
+  constructor() {}
 
-  async headerInit(_token?: string) {
-    const appendToken = (token: string) => {
-      if (this.#headers.get('Authorization')) this.#headers.set('Authorization', `Bearer ${token}`);
-      else this.#headers.append('Authorization', `Bearer ${token}`);
-    };
+  private async headerInit() {
+    const access_token = await getCookie('connect.sid');
 
-    if (_token) appendToken(_token);
-    else {
-      const session = (await getSession()) as Session & { token: string };
-      if (session) appendToken(session.token);
+    if (access_token) {
+      this.#headers.set('Authorization', `Bearer ${access_token}`);
     }
 
     return this.#headers;
@@ -75,7 +66,6 @@ class RequestInterceptors {
 
       if (!res.ok) {
         const errorData = await res.json();
-        console.log(errorData);
 
         if (errorData.statusCode === 401) {
         }
@@ -83,7 +73,9 @@ class RequestInterceptors {
         throw new Error(errorData);
       }
 
-      return res.json() as T;
+      const data = res.json() as T;
+      console.log(data);
+      return data;
     } catch (e: any) {
       // throw new Error(e);
     }
@@ -108,7 +100,6 @@ class RequestInterceptors {
 
       if (!res.ok) {
         const errorData = await res.json();
-        console.log(errorData);
 
         if (errorData.statusCode === 401) {
         }

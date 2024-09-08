@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import http from '@repo/http';
+import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
 
 export interface MyProfileResponseDto {
   id: string;
@@ -16,6 +16,10 @@ export interface MyProfileResponseDto {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  statistics: {
+    id: string;
+    numRevaluations: number;
+  };
 }
 
 export const getMyProfile = async () => await http.get<MyProfileResponseDto>('/my/profile');

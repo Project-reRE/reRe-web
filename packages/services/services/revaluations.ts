@@ -1,7 +1,6 @@
 import { UseQueryResult, useMutation, usePrefetchQuery, useQuery } from '@tanstack/react-query';
 
-import http from '@repo/http';
-
+import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
 import { GetListType } from './common';
 
 export enum MOVIE_SPECIAL_POINT_TYPE {
@@ -31,7 +30,99 @@ export type EmotionStatisticsType = {
 
 export interface RevaluationResponseDto {
   id: string;
+  numStars: string;
+  specialPoint: null;
+  pastValuation: null;
+  presentValuation: null;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+  movie: Movie;
+  user: User;
+  statistics: Statistics;
+  revaluationLikes: any[];
+  isLiked: boolean;
 }
+
+interface Statistics {
+  id: string;
+  numCommentLikes: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}
+
+interface User {
+  id: string;
+  externalId: string;
+  nickName: string;
+  description: string;
+  profileUrl: string;
+  email: string;
+  provider: string;
+  role: string;
+  gender: boolean;
+  birthDate: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}
+
+interface Movie {
+  id: string;
+  data: Data;
+  createdAt: string;
+}
+
+interface Data {
+  genre: string;
+  title: string;
+  actors: Actor[];
+  rating: string;
+  stills: null[];
+  posters: null[];
+  prodYear: string;
+  directors: Director[];
+  repRatDate: string;
+  repRlsDate: string;
+}
+
+interface Director {
+  directorId: string;
+  directorNm: string;
+  directorEnNm: string;
+}
+
+interface Actor {
+  actorId: string;
+  actorNm: string;
+  actorEnNm: string;
+}
+
+export const getRevaluations = async ({ movieId }: { movieId: string }) =>
+  await http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId });
+
+export const useGetRevaluations = ({ movieId }: { movieId: string }) => {
+  return useQuery({
+    queryKey: ['revaluations', movieId],
+    queryFn: () => http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId }),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!movieId,
+  });
+};
+
+export const getMyRevaluations = async ({ limit }: { limit: number }) =>
+  await http.get<GetListType<RevaluationResponseDto>>('/my/revaluations', { limit });
+
+export const useGetMyRevaluations = () => {
+  const limit = 10;
+  return useQuery({
+    queryKey: ['myRevaluations', limit],
+    queryFn: () => getMyRevaluations({ limit }),
+    staleTime: 1000 * 60 * 5,
+  });
+};
 
 export interface RevaluationRequestDto {
   movieId: string;
@@ -41,37 +132,6 @@ export interface RevaluationRequestDto {
   presentValuation: EmotionStatisticsType;
   comment: string;
 }
-
-export const getRevaluations = async ({ movieId }: { movieId: string }) =>
-  await http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId });
-
-export const useGetRevaluations = ({
-  movieId,
-  userId,
-}: {
-  movieId: string;
-  userId?: string;
-}): UseQueryResult<GetListType<RevaluationResponseDto>> => {
-  return useQuery({
-    queryKey: ['revaluations', movieId],
-    queryFn: () => http.get<GetListType<RevaluationResponseDto>>('/revaluations', { limit: 25, movieId }),
-    staleTime: 1000 * 60 * 5,
-    enabled: !!movieId,
-  });
-};
-
-export const useGetMyRevaluations = ({
-  movieId,
-}: {
-  movieId: string;
-}): UseQueryResult<GetListType<RevaluationResponseDto>> => {
-  return useQuery({
-    queryKey: ['myRevaluations', movieId],
-    queryFn: () => http.get<GetListType<RevaluationResponseDto>>('/my/revaluations', { movieId, limit: 25 }),
-    staleTime: 1000 * 60 * 5,
-    enabled: !!movieId,
-  });
-};
 
 export const usePostRevaluation = () => {
   return useMutation({ mutationFn: (data: RevaluationRequestDto) => http.post('/revaluations', data) });
