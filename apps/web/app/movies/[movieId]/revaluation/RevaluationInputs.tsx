@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { SubmitErrorHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import { useRouter } from 'next/navigation';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectSchema, object } from 'yup';
@@ -59,6 +61,7 @@ const RevaluationInputs = ({ movieId }: Props) => {
   };
 
   const onInvalid = (data: any) => {
+    // router.push('?show=true', { scroll: false });
     console.log(data);
   };
 
@@ -96,7 +99,6 @@ const RevaluationInputs = ({ movieId }: Props) => {
 
       <button
         type="submit"
-        onClick={() => console.log('asdf')}
         className="bg-Orange50 mt-[32px] h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"
       >
         재평가 완료하기

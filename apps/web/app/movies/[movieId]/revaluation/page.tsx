@@ -1,22 +1,25 @@
-import React from 'react';
-
-import { getFindOneMovie } from '@repo/services';
+import React, { Suspense } from 'react';
 
 import MovieBanner from '../MovieBanner';
+import ConfirmModal from './ConfirmModal';
 import RevaluationInputs from './RevaluationInputs';
 
 type Props = {
   params: { movieId: string };
+  searchParams: Record<string, string> | null | undefined;
 };
 
-const RevaluationCreatePage = async ({ params }: Props) => {
+const RevaluationCreatePage = async ({ params, searchParams }: Props) => {
+  const show = searchParams?.show;
   const movieId = params.movieId;
-  const data = await getFindOneMovie(movieId);
 
   return (
     <>
-      <MovieBanner data={data.data} statistics={data.statistics} />
+      <Suspense fallback={<h3>loagindsdsf</h3>}>
+        <MovieBanner movieId={movieId} />
+      </Suspense>
       <RevaluationInputs movieId={movieId} />
+      {show && <ConfirmModal />}
     </>
   );
 };
