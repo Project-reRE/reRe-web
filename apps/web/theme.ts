@@ -17,6 +17,13 @@ const baseOptions: ThemeOptions = {
         },
       },
     },
+    MuiSkeleton: {
+      styleOverrides: {
+        root: {
+          transform: 'none',
+        },
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: {

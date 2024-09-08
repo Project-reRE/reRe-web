@@ -1,8 +1,8 @@
-import { MovieDataType, MovieResponseDto } from '@repo/services';
+import { MovieData } from '@repo/services';
 
 type Props = {
   children?: React.ReactNode;
-  data: MovieDataType;
+  data: MovieData;
 };
 
 const MovieItem = ({ children, data }: Props) => {

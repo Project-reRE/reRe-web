@@ -34,7 +34,7 @@ export default function RootLayout({
         <Providers>
           <>
             <Header />
-            <main>
+            <main className="min-h-[calc(100vh-165px)]">
               {children}
               {modal}
               {history}

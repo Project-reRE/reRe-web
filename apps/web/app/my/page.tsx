@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Metadata } from 'next';
 
-import { getMyProfile, useGetMyProfile } from '@repo/services';
+import { getMyProfile } from '@repo/services';
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getMyProfile();
@@ -13,9 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const MyProfilePage = async () => {
-  // const { data, error } = useGetMyProfile();
   const data = await getMyProfile();
-  console.log(data);
 
   return (
     <section className="layout center flex max-w-[952px] flex-col gap-[64px]">
@@ -25,7 +23,9 @@ const MyProfilePage = async () => {
           <div className="flex flex-col gap-[8px]">
             <p className="text-[28px] font-medium text-white">{data?.nickName}</p>
             <div className="text-base font-normal text-[#cccccc]">남성 {data?.birthDate}년생</div>
-            <div className="text-Orange50 text-lg font-medium">재평가한 콘텐츠 수 : {data?.statistics ?? 0}개</div>
+            <div className="text-Orange50 text-lg font-medium">
+              재평가한 콘텐츠 수 : {data?.statistics?.numRevaluations ?? 0}개
+            </div>
           </div>
           <div className="text-base font-normal text-[#cccccc]">{data?.email}</div>
         </div>

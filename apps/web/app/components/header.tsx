@@ -1,6 +1,6 @@
 'use client';
 
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useState } from 'react';
 
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -32,10 +32,13 @@ function Header() {
     setSearchValue(e.target.value);
   };
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!searchValue) return;
-    if (e.key === 'Enter') return router.push(`${PATH.MOVIES}?search=${searchValue}`);
-  };
+  const handleSearch = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (!searchValue) return;
+      if (e.key === 'Enter') return router.push(`${PATH.MOVIES}?search=${searchValue}`);
+    },
+    [searchValue]
+  );
 
   return (
     <header className="container fixed top-0 z-30 flex flex-col text-white">
@@ -84,12 +87,12 @@ function Header() {
         <nav>
           <ul className="flex h-full w-full gap-4 text-lg">
             <li className="h-fit">
-              <Link href={`?tab=ranking`} className={isActive(PATH.RANKING) ? activeStyle : ''}>
+              <Link href={`?tab=ranking`} className={isActive(PATH.RANKING) ? 'font-bold' : ''}>
                 데일리 랭킹
               </Link>
             </li>
             <li className="h-fit">
-              <Link href={`?tab=history`} className={isActive(PATH.HISTORY) ? activeStyle : ''}>
+              <Link href={PATH.MOVIES + PATH.HISTORY} className={isActive(PATH.HISTORY) ? 'font-bold' : ''}>
                 히스토리
               </Link>
             </li>

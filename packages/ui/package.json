@@ -13,7 +13,6 @@
     "./movieItem": "./src/MovieItem.tsx",
     "./rankingHeadCategory": "./src/RankingHeadCategory.tsx",
     "./footer": "./src/Footer.tsx",
-    "./ModalBody": "./src/ModalBody.tsx",
     "./ReviewCard": "./src/ReviewCard.tsx",
     "./SimpleAreaChart": "./src/SimpleAreaChart.tsx",
     "./SimpleBarChart": "./src/SimpleBarChart.tsx",
