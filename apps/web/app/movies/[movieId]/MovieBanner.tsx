@@ -3,19 +3,23 @@ import React from 'react';
 import Image from 'next/image';
 
 import { StarIcon } from '@repo/icon';
-import { ActorType, DirectorType, MovieDataType, MovieStatisticsType } from '@repo/services';
+import { Actor, Director, getFindOneMovie } from '@repo/services';
 
 import { StyledRating } from 'components/StyledRating';
 
 type Props = {
-  data: MovieDataType;
-  statistics: MovieStatisticsType[];
+  movieId: string;
 };
 
-const MovieBanner = ({ data, statistics }: Props) => {
+const MovieBanner = async ({ movieId }: Props) => {
+  const movieData = await getFindOneMovie(movieId);
+
+  if (!movieData) return;
+  const { data, statistics } = movieData;
+
   const yearsData = data.repRlsDate.slice(0, 4);
-  const actorsText = data.actors.map((el: ActorType) => el.actorNm).join(', ');
-  const directorsText = data.directors.map((el: DirectorType) => el.directorNm).join(', ');
+  const actorsText = data.actors.map((el: Actor) => el.actorNm).join(', ');
+  const directorsText = data.directors.map((el: Director) => el.directorNm).join(', ');
 
   const isCurrentRating = statistics && statistics?.[0]?.numStars;
 
@@ -35,7 +39,13 @@ const MovieBanner = ({ data, statistics }: Props) => {
       <div className="mb-[60px] flex items-center justify-center gap-[28px]">
         <div className="relative">
           <figure style={{ width: 260, height: 390 }}>
-            <Image src={data.posters[0] ?? ''} alt={data.title + '포스터 이미지'} fill placeholder="empty" />
+            <Image
+              src={data.posters[0] ?? ''}
+              alt={data.title + '포스터 이미지'}
+              width={260}
+              height={390}
+              placeholder="empty"
+            />
           </figure>
           <span className="absolute bottom-[-24px] text-xs text-[#777777]">출처 : KMdb</span>
         </div>

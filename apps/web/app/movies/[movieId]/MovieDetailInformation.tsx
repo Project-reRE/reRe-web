@@ -27,8 +27,8 @@ import { PATH } from 'constant/path';
 type TabType = 'info' | 'review';
 
 type Props = {
-  movieData: MovieResponseDto;
-  revaluationData: GetListType<RevaluationResponseDto>;
+  movieData?: MovieResponseDto;
+  revaluationData?: GetListType<RevaluationResponseDto>;
 };
 
 const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
@@ -42,7 +42,7 @@ const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
   const currentDate = format(new Date(), 'yyyy-MM');
   const [monthData, setMonthData] = useState(currentDate);
   const targetStatistics = useMemo(
-    () => movieData.statistics.find((el) => el.currentDate === monthData),
+    () => movieData?.statistics.find((el) => el.currentDate === monthData),
     [movieData, monthData]
   );
   const isNextButton = useMemo(() => !(currentDate <= monthData), [monthData]);
@@ -67,7 +67,7 @@ const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
   }, [monthData]);
 
   const handleClickGoMovieButton = () => {
-    window.open(`https://serieson.naver.com/v3/search?query=${movieData.data.title}`);
+    window.open(`https://serieson.naver.com/v3/search?query=${movieData?.data.title}`);
   };
 
   return (
