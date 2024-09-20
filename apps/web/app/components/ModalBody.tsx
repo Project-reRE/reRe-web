@@ -3,12 +3,12 @@ import React from 'react';
 interface ModalProps {
   title: string;
   description: string;
-  callback: () => void;
+  callback?: () => void;
 }
 
 export const ModalBody = ({ title, description, callback }: ModalProps) => {
   const handleClose = () => {
-    callback();
+    callback?.();
   };
 
   return (
