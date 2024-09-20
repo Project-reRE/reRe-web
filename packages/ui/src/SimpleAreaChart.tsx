@@ -1,42 +1,13 @@
-'use client';
-
 import React from 'react';
 
 import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const SimpleAreaChart = () => {
-  const productSales = [
-    {
-      name: '2월',
-      number: '2',
-      product1: 5,
-    },
-    {
-      name: '3월',
-      number: '3',
-      product1: 2,
-    },
-    {
-      name: '1월',
-      number: '1',
-      product1: 4,
-    },
-    {
-      name: '4월',
-      number: '4',
-      product1: 3,
-    },
-    {
-      name: '5월',
-      number: '5',
-      product1: 2,
-    },
-    {
-      name: '6월',
-      number: '6',
-      product1: 5,
-    },
-  ];
+import { NumRecentStarType } from '@repo/services';
+
+const SimpleAreaChart = ({ data }: { data: NumRecentStarType[] }) => {
+  const monthText = (currentDate: string) => {
+    return Number(currentDate.split('-')[1]) + '월';
+  };
 
   return (
     <div className="h-[318px] w-[574px] rounded-[14px] bg-neutral-800 py-[20px]">
@@ -44,7 +15,7 @@ const SimpleAreaChart = () => {
       <AreaChart
         width={574}
         height={250}
-        data={productSales}
+        data={data}
         margin={{
           top: 33,
           right: 34,
@@ -53,25 +24,26 @@ const SimpleAreaChart = () => {
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#444444" />
         <Area
           type="monotone"
-          dataKey="product1"
+          dataKey="numStars"
           stroke="#C85A27"
           fill="#c85a2782"
           dot={{ r: 4, fill: '#C85A27', fillOpacity: 1 }}
         />
         <XAxis
-          dataKey="name"
+          dataKey="currentDate"
           interval={0}
           textAnchor="middle"
           tick={{ fontSize: 10 }}
           tickLine={false}
           tickMargin={10}
+          tickFormatter={monthText}
         />
         <YAxis
           tickCount={6} // Y축의 눈금을 6개로 설정 (0, 1, 2, 3, 4, 5)
           domain={[0, 5]} // Y축의 범위를 고정
           tick={{ fontSize: 10 }}
           tickLine={false}
-          textAnchor="middle"
+          axisLine={false}
           tickMargin={10}
         />
       </AreaChart>

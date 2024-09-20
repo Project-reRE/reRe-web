@@ -3,9 +3,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { EMOTION_TYPE, MOVIE_SPECIAL_POINT_TYPE } from '@repo/services';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ObjectSchema, object } from 'yup';
+
+import {
+  EMOTION_TYPE,
+  MOVIE_SPECIAL_POINT_TYPE,
+  RevaluationRequestDto,
+  useGetMyRevaluations,
+  usePostRevaluation,
+} from '@repo/services';
 
 import { enumToArray } from 'utils/enumToArray';
 
@@ -15,36 +24,83 @@ import ButtonSection from './ButtonSection';
 import InputSection from './InputSection';
 import StaringSection from './StaringSection';
 
-const RevaluationInputs = () => {
+type Props = {
+  movieId: string;
+};
+
+const RevaluationInputs = ({ movieId }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEditMode = Boolean((searchParams.get('mode') ?? 'create') === 'edit');
+  const { data: revaluationData } = useGetMyRevaluations({ movieId }, { enabled: isEditMode });
+  const { mutate: postRevaluation } = usePostRevaluation();
+
+  const schema: ObjectSchema<any> = object({
+    movieId: YUP_SCHEMA.REQUIRED,
+    numStars: YUP_SCHEMA.NUM_REQUIRED,
+    specialPoint: YUP_SCHEMA.REQUIRED,
+    pastValuation: YUP_SCHEMA.REQUIRED,
+    presentValuation: YUP_SCHEMA.REQUIRED,
+    comment: YUP_SCHEMA.REQUIRED,
+  });
+
+  const reviewData = revaluationData?.results[0];
+
   const {
     handleSubmit,
     register, // onChange 등의 이벤트 객체 생성
     watch,
-    formState: { errors },
+    setValue,
   } = useForm({
-    resolver: yupResolver({
-      specialPoint: YUP_SCHEMA.REQUIRED,
-      pastValuation: YUP_SCHEMA.REQUIRED,
-      presentValuation: YUP_SCHEMA.REQUIRED,
-      comment: YUP_SCHEMA.REQUIRED,
-    }),
+    defaultValues: {
+      movieId,
+      numStars: reviewData?.numStars ?? 0.5,
+      specialPoint: reviewData?.specialPoint ?? null,
+      pastValuation: reviewData?.pastValuation ?? null,
+      presentValuation: reviewData?.presentValuation ?? null,
+      comment: reviewData?.comment ?? null,
+    },
+    resolver: yupResolver(schema),
   });
 
-  const handleChangeFormData = (data: any) => {
-    console.log('data', data, errors);
-  };
-
   // 전체 폼 값 동적 확인
-  const [specialPoint, pastValuation, presentValuation, comment] = watch([
+  const [numStars, specialPoint, pastValuation, presentValuation, comment] = watch([
+    'numStars',
     'specialPoint',
     'pastValuation',
     'presentValuation',
     'comment',
   ]);
 
+  const onValid = (data: RevaluationRequestDto) => {
+    console.log('data', data);
+    postRevaluation(data, {
+      onSuccess: () => {
+        router.push('?show=true&type=completed', { scroll: false });
+      },
+      onError: () => {
+        router.push('?show=true&type=409', { scroll: false });
+      },
+    });
+  };
+
+  const onInvalid = (SubmitErrorHandler: any) => {
+    if (SubmitErrorHandler['numStars']) {
+      router.push('?show=true&type=numStars', { scroll: false });
+    } else if (SubmitErrorHandler['specialPoint']) {
+      router.push('?show=true&type=specialPoint', { scroll: false });
+    } else if (SubmitErrorHandler['pastValuation']) {
+      router.push('?show=true&type=pastValuation', { scroll: false });
+    } else if (SubmitErrorHandler['presentValuation']) {
+      router.push('?show=true&type=presentValuation', { scroll: false });
+    } else {
+      router.push('?show=true&type=comment', { scroll: false });
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(handleChangeFormData)} className="flex flex-col items-center">
-      <StaringSection />
+    <form onSubmit={handleSubmit(onValid, onInvalid)} className="flex flex-col items-center">
+      <StaringSection register={register} inputField="numStars" value={numStars} setValue={setValue} />
       <ButtonSection
         register={register}
         inputField="specialPoint"
@@ -67,12 +123,13 @@ const RevaluationInputs = () => {
         selectedButton={presentValuation}
       />
       <InputSection
-        title="영화에 대해 한 줄 평을 남겨주세요"
         register={register}
+        title="영화에 대해 한 줄 평을 남겨주세요"
         inputField="comment"
         maxLength={100}
         value={comment}
       />
+
       <button
         type="submit"
         className="bg-Orange50 mt-[32px] h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"

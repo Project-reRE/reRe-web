@@ -1,12 +1,10 @@
-import MovieItem from 'MovieItem.tsx';
-
 import { Ranking1, Ranking2, Ranking3 } from '@repo/icon';
-import { MovieDataType, MovieResponseDto } from '@repo/services';
+import { MovieData } from '@repo/services';
 
-import '../index.css';
+import MovieItem from './MovieItem';
 
 type Props = {
-  data?: MovieDataType;
+  data?: MovieData;
   rankingNumber: number;
 };
 

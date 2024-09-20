@@ -1,61 +1,70 @@
 import { UseQueryResult, usePrefetchQuery, useQuery } from '@tanstack/react-query';
 
-import http from '@repo/http';
-
+import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
 import { GetListType } from './common';
 import { EmotionStatisticsType, MovieSpecialPointStatisticsType } from './revaluations';
 
-export type DirectorType = {
+export type Director = {
+  directorId: string;
   directorNm: string;
   directorEnNm: string;
-  directorId: string;
 };
 
-export type ActorType = {
+export type Actor = {
+  actorId: string;
   actorNm: string;
   actorEnNm: string;
-  actorId: string;
 };
 
-export interface MovieDataType {
+export interface MovieData {
   title: string;
   genre: string;
   repRlsDate: string;
-  directors: DirectorType[];
-  actors: ActorType[];
+  directors: Director[];
+  actors: Actor[];
   posters: string[];
   stills: string[];
+  prodYear: string;
 }
+
+export interface NumRecentStarType {
+  currentDate: string;
+  numStars: number;
+}
+
+export type AgeType = {
+  TEENS: number;
+  TWENTIES: number;
+  THIRTIES: number;
+  FORTIES: number;
+  FIFTIES_PLUS: number;
+};
+
+export type GenderType = {
+  TEENS: number;
+  TWENTIES: number;
+  THIRTIES: number;
+  FORTIES: number;
+  FIFTIES_PLUS: number;
+};
 
 export interface MovieStatisticsType {
   id: string;
-  numRecentStars: {
-    targetDate: string;
-    numStars: number;
-  }[];
+  numRecentStars: NumRecentStarType[];
   numStars: number;
   numStarsParticipants: number;
   numSpecialPoint: MovieSpecialPointStatisticsType;
   numPastValuation: EmotionStatisticsType;
   numPresentValuation: EmotionStatisticsType;
-  numGender: {
-    MALE: number;
-    FEMALE: number;
-  };
-  numAge: {
-    TEENS: number;
-    TWENTIES: number;
-    THIRTIES: number;
-    FORTIES: number;
-    FIFTIES_PLUS: number;
-  };
-  targetDate: string;
+  numGender: GenderType;
+  numAge: AgeType;
+  currentDate: string;
   // movie: null;
 }
 
 export interface MovieResponseDto {
   id: string;
-  data: MovieDataType;
+  data: MovieData;
   statistics: MovieStatisticsType[];
 }
 
@@ -67,21 +76,26 @@ export interface OpenMovieSetResponseDto {
   condition: string;
   data: {
     id: string;
-    data: MovieDataType;
+    data: MovieData;
   }[];
 }
+
+export const getOpenMovieSets = async () => await http.get<GetListType<OpenMovieSetResponseDto>>(`/open-movie-sets`);
 
 export const useGetOpenMovieSets = () =>
   useQuery({
     queryKey: ['open-movie-sets'],
-    queryFn: () => http.get<GetListType<OpenMovieSetResponseDto>>(`/open-movie-sets`),
+    queryFn: getOpenMovieSets,
     staleTime: 1000 * 60 * 5,
   });
+
+export const getMovies = async ({ title }: { title: string }) =>
+  await http.get<GetListType<MovieResponseDto>>(`/movies`, { title, limit: 25 });
 
 export const useGetMovies = ({ title }: { title: string }): UseQueryResult<GetListType<MovieResponseDto>> => {
   return useQuery({
     queryKey: ['movies', title],
-    queryFn: () => http.get<GetListType<MovieResponseDto>>('/movies', { title, limit: 25 }),
+    queryFn: () => getMovies({ title }),
     staleTime: 1000 * 60 * 5,
     enabled: !!title,
   });
@@ -90,7 +104,7 @@ export const useGetMovies = ({ title }: { title: string }): UseQueryResult<GetLi
 export const getFindOneMovie = async (movieId: string) => await http.get<MovieResponseDto>(`/movies/${movieId}`);
 
 export const useGetFindOneMovie = (movieId: string) =>
-  usePrefetchQuery({
+  useQuery({
     queryKey: ['movie', movieId],
     queryFn: () => getFindOneMovie(movieId),
     staleTime: 1000 * 60 * 5,

@@ -1,19 +1,29 @@
-import { MovieDataType, MovieResponseDto } from '@repo/services';
+import Image from 'next/image';
+
+import { MovieData } from '@repo/services';
+
+import DefaultImage from '../../public/assets/default_img.png';
 
 type Props = {
   children?: React.ReactNode;
-  data: MovieDataType;
+  data: MovieData;
 };
 
 const MovieItem = ({ children, data }: Props) => {
-  if (!data) return <></>;
   const yearsData = data.repRlsDate.slice(0, 4);
   const actorsText = data.actors.map((el) => el.actorNm).join(', ');
   const directorsText = data.directors.map((el) => el.directorNm).join(', ');
 
   return (
     <div className="flex gap-[10px]">
-      <img className="relative h-[300px] w-[200px] rounded" src={data.posters[0]} />
+      <Image
+        className="relative h-[300px] w-[200px] rounded"
+        src={data.posters[0] ?? DefaultImage}
+        width={200}
+        height={300}
+        alt={data.title + '영화 포스터'}
+        placeholder="empty"
+      />
       <div className="flex w-[130px] flex-col items-start justify-end pb-2.5 pt-4">
         <div className="flex w-full flex-col gap-[30px]">
           {children && children}

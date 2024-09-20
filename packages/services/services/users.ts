@@ -1,5 +1,6 @@
-import http from '@repo/http';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+
+import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
 
 export interface MyProfileResponseDto {
   id: string;
@@ -15,12 +16,22 @@ export interface MyProfileResponseDto {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  statistics: {
+    id: string;
+    numRevaluations: number;
+  };
 }
+
+export const getMyProfile = async () => await http.get<MyProfileResponseDto>('/my/profile');
 
 export const useGetMyProfile = () =>
   useQuery({
     queryKey: ['myProfile'],
-    queryFn: () => http.get<MyProfileResponseDto>('/my/profile'),
+    queryFn: () => getMyProfile(),
     staleTime: Infinity,
     gcTime: Infinity,
   });
+
+export const useDeleteMy = () => {
+  return useMutation({ mutationFn: () => http.delete('/my/users') });
+};

@@ -1,14 +1,19 @@
-import AppleSocialIcon from './AppleSocialIcon.tsx';
-import ArrowIcon from './ArrowIcon.tsx';
-import GoogleSocialIcon from './GoogleSocialIcon.tsx';
-import InfoIcon from './InfoIcon.tsx';
-import KakaoSocialIcon from './KakaoSocialIcon.tsx';
-import LogoIcon from './LogoIcon.tsx';
-import Ranking1 from './Ranking1.tsx';
-import Ranking2 from './Ranking2.tsx';
-import Ranking3 from './Ranking3.tsx';
-import SearchIcon from './SearchIcon.tsx';
-import StarIcon from './StarIcon.tsx';
+import AppleSocialIcon from './AppleSocialIcon';
+import ArrowIcon from './ArrowIcon';
+import EmptyIcon from './EmptyIcon';
+import GoogleSocialIcon from './GoogleSocialIcon';
+import InfoIcon from './InfoIcon';
+import KakaoSocialIcon from './KakaoSocialIcon';
+import LogoIcon from './LogoIcon';
+import MyIcon from './MyIcon';
+import NegativeEmoji from './NegativeEmoji';
+import NotSureEmoji from './NotSureEmoji';
+import PositiveEmoji from './PositiveEmoji';
+import Ranking1 from './Ranking1';
+import Ranking2 from './Ranking2';
+import Ranking3 from './Ranking3';
+import SearchIcon from './SearchIcon';
+import StarIcon from './StarIcon';
 
 export {
   Ranking1,
@@ -22,4 +27,9 @@ export {
   ArrowIcon,
   StarIcon,
   InfoIcon,
+  NegativeEmoji,
+  NotSureEmoji,
+  PositiveEmoji,
+  MyIcon,
+  EmptyIcon,
 };

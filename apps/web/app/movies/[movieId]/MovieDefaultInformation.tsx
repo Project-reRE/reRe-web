@@ -3,19 +3,25 @@ import React from 'react';
 import Image from 'next/image';
 
 import { StarIcon } from '@repo/icon';
-import { ActorType, DirectorType, MovieDataType, MovieStatisticsType } from '@repo/services';
+import { Actor, Director, getFindOneMovie } from '@repo/services';
 
 import { StyledRating } from 'components/StyledRating';
 
+import DefaultImage from '../../../public/assets/default_img.png';
+
 type Props = {
-  data: MovieDataType;
-  statistics: MovieStatisticsType[];
+  movieId: string;
 };
 
-const MovieBanner = ({ data, statistics }: Props) => {
+const MovieReviewDetailInformation = async ({ movieId }: Props) => {
+  const movieData = await getFindOneMovie(movieId);
+
+  if (!movieData) return;
+  const { data, statistics } = movieData;
+
   const yearsData = data.repRlsDate.slice(0, 4);
-  const actorsText = data.actors.map((el: ActorType) => el.actorNm).join(', ');
-  const directorsText = data.directors.map((el: DirectorType) => el.directorNm).join(', ');
+  const actorsText = data.actors.map((el: Actor) => el.actorNm).join(', ');
+  const directorsText = data.directors.map((el: Director) => el.directorNm).join(', ');
 
   const isCurrentRating = statistics && statistics?.[0]?.numStars;
 
@@ -24,17 +30,28 @@ const MovieBanner = ({ data, statistics }: Props) => {
       {/* dim */}
       <div className="absolute left-0 top-0 h-[84px] w-full bg-gradient-to-t from-transparent to-[#141414]" />
       <div className="absolute bottom-0 left-0 h-[120px] w-full bg-gradient-to-b from-transparent to-[#141414]" />
-      <Image
-        src={data.stills?.[0] ?? data.posters?.[0] ?? ''}
-        className="absolute left-0 top-0 z-[-2] h-[594px] w-full bg-gradient-to-b blur-xl"
-        alt={data.title + '스틸 이미지'}
-        width={0}
-        height={594}
-        style={{ width: '100%', maxHeight: 594 }}
-      />
+      {/* 이미지 없는 경우에는 노출하지 않음 */}
+      {(data.stills?.[0] || data.posters?.[0]) && (
+        <Image
+          src={data.stills?.[0] ?? data.posters?.[0] ?? ''}
+          className="absolute left-0 top-0 z-[-2] h-[594px] w-full bg-gradient-to-b blur-xl"
+          alt={data.title + '스틸 이미지'}
+          fill
+          style={{ width: '100%', maxHeight: 594 }}
+          placeholder="empty"
+        />
+      )}
       <div className="mb-[60px] flex items-center justify-center gap-[28px]">
         <div className="relative">
-          <Image src={data.posters[0] ?? ''} alt={data.title + '포스터 이미지'} width={260} height={390} />
+          <figure style={{ width: 260, height: 390 }}>
+            <Image
+              src={data.posters[0] ?? DefaultImage}
+              alt={data.title + '포스터 이미지'}
+              width={260}
+              height={390}
+              placeholder="empty"
+            />
+          </figure>
           <span className="absolute bottom-[-24px] text-xs text-[#777777]">출처 : KMdb</span>
         </div>
         <div className="flex flex-col gap-[26px]">
@@ -90,4 +107,4 @@ const MovieBanner = ({ data, statistics }: Props) => {
   );
 };
 
-export default MovieBanner;
+export default MovieReviewDetailInformation;

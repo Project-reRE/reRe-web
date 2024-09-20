@@ -1,5 +1,6 @@
-import http from '@repo/http';
 import { useQuery } from '@tanstack/react-query';
+
+import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
 import { GetListType } from './common';
 
 export interface OpenBannerResponseDto {
@@ -13,10 +14,12 @@ export interface OpenBannerResponseDto {
   display: boolean;
 }
 
+export const getOpenBanner = async () => await http.get<GetListType<OpenBannerResponseDto>>('/open-banners');
+
 export const useGetOpenBanner = () => {
   return useQuery({
     queryKey: ['open-banners'],
-    queryFn: () => http.get<GetListType<OpenBannerResponseDto>>('/open-banners'),
+    queryFn: getOpenBanner,
     staleTime: Infinity,
     gcTime: Infinity,
   });
