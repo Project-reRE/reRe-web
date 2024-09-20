@@ -1,9 +1,13 @@
+import { getSession } from 'next-auth/react';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { refreshKakaoToken, verifyToken } from 'api/auth/[...nextauth]/tokenmanager';
 
 import { PATH } from 'constant/path';
+
+const matchersForAuth = ['/dashboard/*', '/myaccount/*', '/settings/*', '...'];
+const matchersForSignIn = ['/signup/*', '/signin/*'];
 
 export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import type { Metadata } from 'next';
 
@@ -33,16 +33,18 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <body className={`bg-Background m-auto h-full w-full min-w-[1152px] max-w-[1152px]`}>
         <Providers>
-          <>
-            <Header />
-            <main className="min-h-[calc(100vh-165px)]">
-              {children}
-              {modal}
-              {history}
-              {ranking}
-            </main>
-            <Footer />
-          </>
+          <Suspense fallback={<>loading</>}>
+            <>
+              <Header />
+              <main className="min-h-[calc(100vh-165px)]">
+                {children}
+                {modal}
+                {history}
+                {ranking}
+              </main>
+              <Footer />
+            </>
+          </Suspense>
         </Providers>
       </body>
     </html>
