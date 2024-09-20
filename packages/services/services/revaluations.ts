@@ -1,7 +1,16 @@
-import { UseQueryResult, useMutation, usePrefetchQuery, useQuery } from '@tanstack/react-query';
+import {
+  QueryOptions,
+  UseBaseQueryOptions,
+  UseQueryOptions,
+  UseQueryResult,
+  queryOptions,
+  useMutation,
+  usePrefetchQuery,
+  useQuery,
+} from '@tanstack/react-query';
 
 import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
-import { GetListType } from './common';
+import { GetListType, removeUndefined } from './common';
 
 export enum MOVIE_SPECIAL_POINT_TYPE {
   '기획 의도' = 'PLANNING_INTENT',
@@ -112,15 +121,29 @@ export const useGetRevaluations = ({ movieId }: { movieId: string }) => {
   });
 };
 
-export const getMyRevaluations = async ({ limit }: { limit: number }) =>
-  await http.get<GetListType<RevaluationResponseDto>>('/my/revaluations', { limit });
+interface SearchType {
+  page?: number;
+  limit?: number;
+  movieId?: string;
+  startDate?: string;
+  endDate?: string;
+}
 
-export const useGetMyRevaluations = () => {
+export const getMyRevaluations = async ({ limit, movieId, startDate, endDate }: SearchType) =>
+  await http.get<GetListType<RevaluationResponseDto>>('/my/revaluations', { limit, movieId, startDate, endDate });
+
+export const useGetMyRevaluations = (
+  { movieId, startDate, endDate }: SearchType,
+  options?: Omit<UseQueryOptions<GetListType<RevaluationResponseDto> | any>, 'queryKey' | 'queryFn'>
+) => {
   const limit = 10;
+  const queryParams = removeUndefined({ limit, movieId, startDate, endDate }) as SearchType;
+
   return useQuery({
-    queryKey: ['myRevaluations', limit],
-    queryFn: () => getMyRevaluations({ limit }),
+    queryKey: ['myRevaluations', queryParams],
+    queryFn: () => getMyRevaluations(queryParams),
     staleTime: 1000 * 60 * 5,
+    ...options,
   });
 };
 

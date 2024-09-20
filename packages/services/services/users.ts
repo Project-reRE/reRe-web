@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import http from '../../../apps/web/app/api/auth/[...nextauth]/http';
 
@@ -31,3 +31,7 @@ export const useGetMyProfile = () =>
     staleTime: Infinity,
     gcTime: Infinity,
   });
+
+export const useDeleteMy = () => {
+  return useMutation({ mutationFn: () => http.delete('/my/users') });
+};

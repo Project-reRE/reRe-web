@@ -3,12 +3,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ObjectSchema, object } from 'yup';
 
-import { EMOTION_TYPE, MOVIE_SPECIAL_POINT_TYPE, RevaluationRequestDto, usePostRevaluation } from '@repo/services';
+import {
+  EMOTION_TYPE,
+  MOVIE_SPECIAL_POINT_TYPE,
+  RevaluationRequestDto,
+  useGetMyRevaluations,
+  usePostRevaluation,
+} from '@repo/services';
 
 import { enumToArray } from 'utils/enumToArray';
 
@@ -23,6 +29,10 @@ type Props = {
 };
 
 const RevaluationInputs = ({ movieId }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEditMode = Boolean((searchParams.get('mode') ?? 'create') === 'edit');
+  const { data: revaluationData } = useGetMyRevaluations({ movieId }, { enabled: isEditMode });
   const { mutate: postRevaluation } = usePostRevaluation();
 
   const schema: ObjectSchema<any> = object({
@@ -34,6 +44,8 @@ const RevaluationInputs = ({ movieId }: Props) => {
     comment: YUP_SCHEMA.REQUIRED,
   });
 
+  const reviewData = revaluationData?.results[0];
+
   const {
     handleSubmit,
     register, // onChange 등의 이벤트 객체 생성
@@ -42,6 +54,11 @@ const RevaluationInputs = ({ movieId }: Props) => {
   } = useForm({
     defaultValues: {
       movieId,
+      numStars: reviewData?.numStars ?? 0.5,
+      specialPoint: reviewData?.specialPoint ?? null,
+      pastValuation: reviewData?.pastValuation ?? null,
+      presentValuation: reviewData?.presentValuation ?? null,
+      comment: reviewData?.comment ?? null,
     },
     resolver: yupResolver(schema),
   });
@@ -57,12 +74,28 @@ const RevaluationInputs = ({ movieId }: Props) => {
 
   const onValid = (data: RevaluationRequestDto) => {
     console.log('data', data);
-    postRevaluation(data);
+    postRevaluation(data, {
+      onSuccess: () => {
+        router.push('?show=true&type=completed', { scroll: false });
+      },
+      onError: () => {
+        router.push('?show=true&type=409', { scroll: false });
+      },
+    });
   };
 
-  const onInvalid = (data: any) => {
-    // router.push('?show=true', { scroll: false });
-    console.log(data);
+  const onInvalid = (SubmitErrorHandler: any) => {
+    if (SubmitErrorHandler['numStars']) {
+      router.push('?show=true&type=numStars', { scroll: false });
+    } else if (SubmitErrorHandler['specialPoint']) {
+      router.push('?show=true&type=specialPoint', { scroll: false });
+    } else if (SubmitErrorHandler['pastValuation']) {
+      router.push('?show=true&type=pastValuation', { scroll: false });
+    } else if (SubmitErrorHandler['presentValuation']) {
+      router.push('?show=true&type=presentValuation', { scroll: false });
+    } else {
+      router.push('?show=true&type=comment', { scroll: false });
+    }
   };
 
   return (

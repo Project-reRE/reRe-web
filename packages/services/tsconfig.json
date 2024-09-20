@@ -1,5 +1,5 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
-  "include": ["."],
+  "include": [".", "../../apps/web/auth.d.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }

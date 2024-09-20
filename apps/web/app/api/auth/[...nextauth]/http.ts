@@ -34,6 +34,7 @@ class RequestInterceptors {
 
   private async headerInit() {
     const access_token = await getCookie('connect.sid');
+    this.#headers.set('Content-Type', '	application/json');
 
     if (access_token) {
       this.#headers.set('Authorization', `Bearer ${access_token}`);
@@ -62,6 +63,7 @@ class RequestInterceptors {
         method: 'GET',
         ...configs,
         headers,
+        cache: 'no-store', // ssr
       });
 
       if (!res.ok) {
@@ -74,26 +76,22 @@ class RequestInterceptors {
       }
 
       const data = res.json() as T;
-      console.log(data);
       return data;
     } catch (e: any) {
-      // throw new Error(e);
+      console.log(e);
     }
   }
 
   async post<T, D = {}>(uri: string, data: D, config?: fetchOptionType) {
     let requestUrl = config?.baseURL || apiConfig.baseURL + uri;
-    let body;
-    body = data;
 
     try {
       const configs = await this.init({ configOptions: config });
       const headers = await this.headerInit();
-      body = createFormData(data!);
 
       const res = await fetch(requestUrl, {
         method: 'POST',
-        body: body,
+        body: JSON.stringify(data),
         ...configs,
         headers,
       });
@@ -109,12 +107,41 @@ class RequestInterceptors {
 
       return res.json() as T;
     } catch (e: any) {
-      // throw new Error(e);
+      const errorData = await e.json();
+      throw new Error(errorData);
     }
   }
   put() {}
   patch() {}
-  delete() {}
+
+  async delete<T>(uri: string, config?: fetchOptionType) {
+    let requestUrl = config?.baseURL || apiConfig.baseURL + uri;
+
+    try {
+      const configs = await this.init({ configOptions: config });
+      const headers = await this.headerInit();
+
+      const res = await fetch(requestUrl, {
+        method: 'DELETE',
+        headers,
+        ...configs,
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+
+        if (errorData.statusCode === 401) {
+        }
+
+        throw new Error(errorData);
+      }
+
+      return res.json() as T;
+    } catch (e: any) {
+      const errorData = await e.json();
+      throw new Error(errorData);
+    }
+  }
 }
 
 const http = new RequestInterceptors();

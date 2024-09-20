@@ -1,8 +1,8 @@
+import { Suspense } from 'react';
+
 import dynamic from 'next/dynamic';
 
-import { getMovies, getOpenBanner, getOpenMovieSets } from '@repo/services';
-
-import EmptyBlankView from 'components/EmptyBlankView';
+import SkeletonMovieList from './components/SkeletonMovieList';
 
 const Ranking = dynamic(() => import('./components/Ranking'));
 const SearchResult = dynamic(() => import('./components/SearchResult'));
@@ -13,27 +13,24 @@ type Props = {
 
 const RankingPage = async ({ searchParams }: Props) => {
   const search = searchParams?.search ?? '';
-  const moviesData = await getMovies({ title: search });
-  const openMovieSetData = await getOpenMovieSets();
-  const openBannerData = await getOpenBanner();
+  // const [moviesData, openMovieSetData, openBannerData] = Promise.all([
+  //   await getMovies({ title: search }),
+  //   await getOpenMovieSets(),
+  //   await getOpenBanner(),
+  // ]);
 
   const isSearch = Boolean(search);
 
   return (
     <>
       {isSearch ? (
-        <>
-          {moviesData ? (
-            <SearchResult moviesData={moviesData} searchText={search} />
-          ) : (
-            <EmptyBlankView
-              title={`'${search}'에 대한 검색결과가 없어요.`}
-              description="개봉한지 5년이 지난 영화인지 확인해 보세요."
-            />
-          )}
-        </>
+        <Suspense fallback={<SkeletonMovieList />}>
+          <SearchResult search={search} />
+        </Suspense>
       ) : (
-        <Ranking openBannerData={openBannerData} openMovieSetData={openMovieSetData} />
+        <Suspense>
+          <Ranking />
+        </Suspense>
       )}
     </>
   );

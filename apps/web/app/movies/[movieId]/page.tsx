@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic';
 
 import { getFindOneMovie, getRevaluations } from '@repo/services';
 
-const MovieBanner = dynamic(() => import('./MovieBanner'));
-const MovieDetailInformation = dynamic(() => import('./MovieDetailInformation'));
+const MovieBanner = dynamic(() => import('./MovieDefaultInformation'));
+const MovieDetailInformation = dynamic(() => import('./MovieReviewDetailInformation'));
 
 type Props = {
   params: { movieId: string };
@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const MovieDetailPage = async ({ params }: Props) => {
   const movieData = await getFindOneMovie(params.movieId);
   const revaluationData = await getRevaluations({ movieId: params.movieId });
+
+  console.log(revaluationData);
 
   return (
     <>

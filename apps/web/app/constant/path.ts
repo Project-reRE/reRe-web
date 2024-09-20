@@ -7,4 +7,5 @@ export const PATH = {
   HISTORY: '/history',
   RANKING: '/ranking',
   MY: '/my',
+  WITHDRAW: '/withdraw',
 } as const;

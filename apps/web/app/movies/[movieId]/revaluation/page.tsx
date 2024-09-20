@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import MovieBanner from '../MovieBanner';
+import MovieReviewDetailInformation from '../MovieDefaultInformation';
 import ConfirmModal from './ConfirmModal';
 import RevaluationInputs from './RevaluationInputs';
 
@@ -16,10 +16,10 @@ const RevaluationCreatePage = async ({ params, searchParams }: Props) => {
   return (
     <>
       <Suspense fallback={<h3>loagindsdsf</h3>}>
-        <MovieBanner movieId={movieId} />
+        <MovieReviewDetailInformation movieId={movieId} />
       </Suspense>
       <RevaluationInputs movieId={movieId} />
-      {show && <ConfirmModal />}
+      {show && <ConfirmModal movieId={movieId} searchParams={searchParams} />}
     </>
   );
 };

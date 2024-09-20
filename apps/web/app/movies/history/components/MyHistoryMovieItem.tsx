@@ -1,8 +1,13 @@
+'use client';
+
 import React from 'react';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { RevaluationResponseDto } from '@repo/services';
+
+import { PATH } from 'constant/path';
 
 import DefaultImage from '../../../../public/assets/default_img.png';
 
@@ -11,6 +16,13 @@ type Props = {
 };
 
 const MyHistoryMovieItem = ({ item }: Props) => {
+  const router = useRouter();
+
+  const handleMoveRevaluationEdit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(`${PATH.MOVIES}/${item.movie.id}/revaluation?mode=edit`);
+  };
+
   return (
     <div className="group relative h-[510px] w-[340px] cursor-pointer overflow-hidden rounded-[15px]">
       <Image
@@ -45,7 +57,10 @@ const MyHistoryMovieItem = ({ item }: Props) => {
           <p className="text-sm font-medium text-white">{item.comment}</p>
         </div>
         <div className="flex w-full justify-between">
-          <button className="flex h-[35px] w-[142px] items-center justify-center gap-2.5 rounded-[500px] bg-[#c85a27] text-base font-medium text-white">
+          <button
+            className="flex h-[35px] w-[142px] items-center justify-center gap-2.5 rounded-[500px] bg-[#c85a27] text-base font-medium text-white"
+            onClick={handleMoveRevaluationEdit}
+          >
             재평가 수정하기
           </button>
           <button className="flex h-[35px] w-[142px] items-center justify-center gap-2.5 rounded-[500px] bg-[#749037] text-base font-medium text-white">

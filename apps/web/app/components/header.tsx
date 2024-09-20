@@ -4,7 +4,7 @@ import React, { HTMLAttributes, useCallback, useState } from 'react';
 
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { LogoIcon, MyIcon, SearchIcon } from '@repo/icon';
 
@@ -13,9 +13,10 @@ import { PATH } from 'constant/path';
 function Header() {
   const { data } = useSession();
   const isLogin = Boolean(data?.expires);
-  const [searchValue, setSearchValue] = useState('');
-  const currentPathname = usePathname();
   const router = useRouter();
+  const currentPathname = usePathname();
+  const searchParams = useSearchParams();
+  const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '');
 
   const activeStyle = 'text-Orange60 font-semibold' as HTMLAttributes<HTMLElement>['className'];
 
@@ -100,11 +101,13 @@ function Header() {
         </nav>
         <div className="flex h-[36px] items-center gap-[10px] border border-white bg-[#141414] px-[10px]">
           <input
+            id="searchInput"
             type="text"
             placeholder="개봉한지 5년이 지난 재평가가 필요한 영화를 찾아보세요"
             className="placeholder:text-Gray60 text-White w-[320px] text-sm font-medium"
             onChange={handleChangeSearchInput}
             onKeyDown={handleSearch}
+            defaultValue={searchValue}
           />
           <SearchIcon />
         </div>

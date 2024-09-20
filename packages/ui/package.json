@@ -5,12 +5,10 @@
   "type": "module",
   "exports": {
     "./article": "./src/article.tsx",
-    "./button": "./src/button.tsx",
+    "./Button": "./src/Button.tsx",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
     "./topBannerSlider": "./src/topBannerSlider.tsx",
-    "./rankingMovie": "./src/RankingMovie.tsx",
-    "./movieItem": "./src/MovieItem.tsx",
     "./rankingHeadCategory": "./src/RankingHeadCategory.tsx",
     "./footer": "./src/Footer.tsx",
     "./ReviewCard": "./src/ReviewCard.tsx",

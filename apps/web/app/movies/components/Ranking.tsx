@@ -2,21 +2,19 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import { GetListType, OpenBannerResponseDto, OpenMovieSetResponseDto } from '@repo/services';
+import { OpenMovieSetResponseDto, getOpenBanner, getOpenMovieSets } from '@repo/services';
 import { ColorMap } from '@repo/tailwind-config/theme';
 import RankingHeadCategory from '@repo/ui/rankingHeadCategory';
-import RankingMovie from '@repo/ui/rankingMovie';
 
+import RankingMovie from 'components/RankingMovie';
 import TopBannerSlider from 'components/TopBannerSlider';
 
 import { PATH } from 'constant/path';
 
-type Props = {
-  openMovieSetData?: GetListType<OpenMovieSetResponseDto>;
-  openBannerData?: GetListType<OpenBannerResponseDto>;
-};
+const Ranking = async () => {
+  const openMovieSetData = await getOpenMovieSets();
+  const openBannerData = await getOpenBanner();
 
-const Ranking = ({ openBannerData, openMovieSetData }: Props) => {
   return (
     <>
       <section className="layout">{openBannerData && <TopBannerSlider items={openBannerData.results} />}</section>

@@ -2,11 +2,18 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { addMonths, format, subMonths } from 'date-fns';
 
 import { ArrowIcon } from '@repo/icon';
 
-const DateControl = () => {
+type Props = {
+  startDate?: string;
+};
+
+const DateControl = ({ startDate }: Props) => {
+  const router = useRouter();
   const currentDate = format(new Date(), 'yyyy-MM');
   const [monthData, setMonthData] = useState(currentDate);
 
@@ -15,6 +22,7 @@ const DateControl = () => {
   const handleClickPrevDate = useCallback(() => {
     const date = format(subMonths(monthData, 1), 'yyyy-MM');
     setMonthData(date);
+    router.push(`?startDate=${date}`);
   }, [monthData]);
 
   const handleClickNextDate = useCallback(() => {

@@ -31,7 +31,7 @@ type Props = {
   revaluationData?: GetListType<RevaluationResponseDto>;
 };
 
-const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
+const MovieReviewDetailInformation = ({ movieData, revaluationData }: Props) => {
   const searchParams = useSearchParams();
   const tabValue = (searchParams.get('tabValue') as TabType) ?? 'info';
   const [tabState, setTabState] = useState<TabType>(tabValue);
@@ -41,10 +41,11 @@ const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
 
   const currentDate = format(new Date(), 'yyyy-MM');
   const [monthData, setMonthData] = useState(currentDate);
-  const targetStatistics = useMemo(
-    () => movieData?.statistics.find((el) => el.currentDate === monthData),
-    [movieData, monthData]
-  );
+  const targetStatistics = movieData?.statistics[0];
+  // const targetStatistics = useMemo(
+  //   () => movieData?.statistics.find((el) => el.currentDate === monthData),
+  //   [movieData, monthData]
+  // );
   const isNextButton = useMemo(() => !(currentDate <= monthData), [monthData]);
 
   const handleChange = (_: React.SyntheticEvent, value: TabType) => {
@@ -69,6 +70,9 @@ const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
   const handleClickGoMovieButton = () => {
     window.open(`https://serieson.naver.com/v3/search?query=${movieData?.data.title}`);
   };
+
+  console.log(targetStatistics?.numSpecialPoint);
+  console.log(revaluationData);
 
   return (
     <>
@@ -146,4 +150,4 @@ const MovieDetailInformation = ({ movieData, revaluationData }: Props) => {
   );
 };
 
-export default MovieDetailInformation;
+export default MovieReviewDetailInformation;

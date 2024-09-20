@@ -7,11 +7,13 @@ import { Actor, Director, getFindOneMovie } from '@repo/services';
 
 import { StyledRating } from 'components/StyledRating';
 
+import DefaultImage from '../../../public/assets/default_img.png';
+
 type Props = {
   movieId: string;
 };
 
-const MovieBanner = async ({ movieId }: Props) => {
+const MovieReviewDetailInformation = async ({ movieId }: Props) => {
   const movieData = await getFindOneMovie(movieId);
 
   if (!movieData) return;
@@ -28,19 +30,22 @@ const MovieBanner = async ({ movieId }: Props) => {
       {/* dim */}
       <div className="absolute left-0 top-0 h-[84px] w-full bg-gradient-to-t from-transparent to-[#141414]" />
       <div className="absolute bottom-0 left-0 h-[120px] w-full bg-gradient-to-b from-transparent to-[#141414]" />
-      <Image
-        src={data.stills?.[0] ?? data.posters?.[0] ?? ''}
-        className="absolute left-0 top-0 z-[-2] h-[594px] w-full bg-gradient-to-b blur-xl"
-        alt={data.title + '스틸 이미지'}
-        fill
-        style={{ width: '100%', maxHeight: 594 }}
-        placeholder="empty"
-      />
+      {/* 이미지 없는 경우에는 노출하지 않음 */}
+      {(data.stills?.[0] || data.posters?.[0]) && (
+        <Image
+          src={data.stills?.[0] ?? data.posters?.[0] ?? ''}
+          className="absolute left-0 top-0 z-[-2] h-[594px] w-full bg-gradient-to-b blur-xl"
+          alt={data.title + '스틸 이미지'}
+          fill
+          style={{ width: '100%', maxHeight: 594 }}
+          placeholder="empty"
+        />
+      )}
       <div className="mb-[60px] flex items-center justify-center gap-[28px]">
         <div className="relative">
           <figure style={{ width: 260, height: 390 }}>
             <Image
-              src={data.posters[0] ?? ''}
+              src={data.posters[0] ?? DefaultImage}
               alt={data.title + '포스터 이미지'}
               width={260}
               height={390}
@@ -102,4 +107,4 @@ const MovieBanner = async ({ movieId }: Props) => {
   );
 };
 
-export default MovieBanner;
+export default MovieReviewDetailInformation;
