@@ -4,8 +4,7 @@
   "private": true,
   "exports": {
     "./http": "./http.ts",
-    "./authOptions": "./authOptions.ts",
-    "./types/*": "./types/index.ts"
+    ".": "./index.ts"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"

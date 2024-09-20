@@ -1,0 +1,105 @@
+name: Deploy Web to Amazon EC2
+
+on:
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - 'apps/web/**'
+      - '.github/workflows/deploy-web.yml'
+      - 'docker-compose.yml'
+      - 'ecosystem.config.js'
+
+jobs:
+  build:
+    name: Build and Deploy Web
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22]
+        pnpm-version: [9]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          export VERSION=$(node -p "require('./apps/web/package.json').version")
+          docker build -t ${{ secrets.DOCKER_REPO_WEB }}:$VERSION -f apps/web/Dockerfile .
+          docker tag ${{ secrets.DOCKER_REPO_WEB }}:$VERSION ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
+          docker tag ${{ secrets.DOCKER_REPO_WEB }}:$VERSION ${{ secrets.DOCKER_REPO_WEB }}:latest
+          docker push ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
+          docker push ${{ secrets.DOCKER_REPO_WEB }}:latest
+
+      - name: Set environment for production
+        if: github.ref == 'refs/heads/main'
+        run: echo "ENV_FILE=.env.production" >> $GITHUB_ENV
+
+      - name: Set environment for development
+        if: github.ref == 'refs/heads/development'
+        run: echo "ENV_FILE=.env.development" >> $GITHUB_ENV
+
+      - name: Get GitHub Actions IP
+        id: ip
+        uses: haythem/public-ip@v1.2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Add Github Actions IP to Security group
+        run: |
+          aws ec2 authorize-security-group-ingress \
+          --group-id ${{ secrets.AWS_SG_ID }} \
+          --protocol tcp --port 22 \
+          --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: SSH to EC2 and deploy Web
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.AWS_PEM_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            export VERSION=$(node -p "require('./package.json').version")
+            docker pull ${{ secrets.DOCKER_REPO_WEB }}:$VERSION
+            cd ${{ secrets.DOCKER_REPO_WEB }} # 프로젝트 루트로 이동
+            docker-compose --env-file $ENV_FILE up -d
+            docker restart nginx  # Nginx 컨테이너를 재시작하여 새로운 설정 반영
+
+      - name: Remove Github Actions IP From Security Group
+        run: |
+          aws ec2 revoke-security-group-ingress \ 
+          --group-id ${{ secrets.AWS_SG_ID }} \
+          --protocol tcp --port 22 \
+          --cidr ${{ steps.ip.outputs.ipv4 }}/32

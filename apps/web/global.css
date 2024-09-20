@@ -1,1 +1,15 @@
 @import '@repo/tailwind-config/global.css';
+
+.center {
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 1152px !important;
+  min-width: 1152px;
+  width: 100%;
+}
+
+.layout {
+  margin-top: 109px !important; /*헤더 영역*/
+}
