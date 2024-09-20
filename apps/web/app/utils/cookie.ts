@@ -7,7 +7,12 @@ export async function setCookie(key: string, value: string) {
 }
 
 export async function getCookie(key: string) {
-  return cookies().get(key)?.value;
+  const cookieData = cookies().get(key)?.value;
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve(cookieData);
+    }, 1000)
+  );
 }
 
 export async function deleteCookie(key: string) {

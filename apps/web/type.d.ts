@@ -10,3 +10,5 @@ declare module 'next-auth' {
     accessToken: string;
   }
 }
+
+declare module 'next-auth';
