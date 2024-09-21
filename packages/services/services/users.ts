@@ -32,6 +32,19 @@ export const useGetMyProfile = () =>
     gcTime: Infinity,
   });
 
+interface UpdateUserRequestDto {
+  profileUrl: string;
+  description: string;
+  gender: boolean;
+  birthDate: string;
+  email: string;
+  nickName: string;
+}
+
+export const usePutMy = () => {
+  return useMutation({ mutationFn: (data: Partial<UpdateUserRequestDto>) => http.put('/my/users', data) });
+};
+
 export const useDeleteMy = () => {
   return useMutation({ mutationFn: () => http.delete('/my/users') });
 };

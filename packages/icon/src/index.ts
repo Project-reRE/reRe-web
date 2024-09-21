@@ -1,5 +1,6 @@
 import AppleSocialIcon from './AppleSocialIcon';
 import ArrowIcon from './ArrowIcon';
+import EditIcon from './EditIcon';
 import EmptyIcon from './EmptyIcon';
 import GoogleSocialIcon from './GoogleSocialIcon';
 import InfoIcon from './InfoIcon';
@@ -32,4 +33,5 @@ export {
   PositiveEmoji,
   MyIcon,
   EmptyIcon,
+  EditIcon,
 };
