@@ -11,10 +11,13 @@ const EmptyBox = () => (
 );
 
 function SignInPage() {
-  console.log(process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID);
   const signInKaKao = () => {
-    signIn('kakao', { callbackUrl: 'http://localhost:3000/sign-in' });
+    signIn('kakao', { callbackUrl: process.env.NEXTAUTH_URL });
   };
+
+  function signInKaKaoGoogle() {
+    signIn('google', { callbackUrl: process.env.NEXTAUTH_URL });
+  }
 
   const buttonStyle =
     'flex h-[52px] w-[360px] items-center justify-between rounded-lg px-5 py-3.5 ' as HTMLAttributes<HTMLElement>['className'];
@@ -37,7 +40,7 @@ function SignInPage() {
           <div className="text-[15px] text-white">Apple로 계속하기</div>
           <EmptyBox />
         </button>
-        <button className={buttonStyle + 'bg-white'}>
+        <button className={buttonStyle + 'bg-white'} onClick={signInKaKaoGoogle}>
           <GoogleSocialIcon />
           <div className="text-[15px] text-[#141414]">Google로 계속하기</div>
           <EmptyBox />
