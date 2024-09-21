@@ -11,6 +11,7 @@ const EmptyBox = () => (
 );
 
 function SignInPage() {
+  console.log(process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID);
   const signInKaKao = () => {
     signIn('kakao', { callbackUrl: 'http://localhost:3000/sign-in' });
   };

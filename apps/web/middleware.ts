@@ -6,9 +6,6 @@ import { refreshKakaoToken, verifyToken } from 'api/auth/[...nextauth]/tokenmana
 
 import { PATH } from 'constant/path';
 
-const matchersForAuth = ['/dashboard/*', '/myaccount/*', '/settings/*', '...'];
-const matchersForSignIn = ['/signup/*', '/signin/*'];
-
 export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
 

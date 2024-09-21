@@ -29,7 +29,7 @@ export async function refreshKakaoToken(refreshToken: string) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=refresh_token&client_id=${process.env.KAKAO_CLIENT_ID}&refresh_token=${refreshToken}&client_secret=${process.env.KAKAO_SECRET}`,
+      body: `grant_type=refresh_token&client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&refresh_token=${refreshToken}&client_secret=${process.env.KAKAO_SECRET}`,
     });
 
     return response.json();
