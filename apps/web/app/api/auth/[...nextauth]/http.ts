@@ -111,7 +111,37 @@ class RequestInterceptors {
       throw new Error(errorData);
     }
   }
-  put() {}
+
+  async put<T, D = {}>(uri: string, data: D, config?: fetchOptionType) {
+    let requestUrl = config?.baseURL || apiConfig.baseURL + uri;
+
+    try {
+      const configs = await this.init({ configOptions: config });
+      const headers = await this.headerInit();
+
+      const res = await fetch(requestUrl, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        ...configs,
+        headers,
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+
+        if (errorData.statusCode === 401) {
+        }
+
+        throw new Error(errorData);
+      }
+
+      return res.json() as T;
+    } catch (e: any) {
+      const errorData = await e.json();
+      throw new Error(errorData);
+    }
+  }
+
   patch() {}
 
   async delete<T>(uri: string, config?: fetchOptionType) {
