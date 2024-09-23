@@ -2,8 +2,6 @@ import React from 'react';
 
 import { getMyRevaluations } from '@repo/services';
 
-import { getStartAndEndDate } from 'utils/getStartAndEndDate';
-
 import EmptyBlankView from 'components/EmptyBlankView';
 
 import MyHistoryMovieItem from './MyHistoryMovieItem';
@@ -13,11 +11,7 @@ type Props = {
 };
 
 const MovieRevaluationHistoryList = async ({ startDate: _startDate }: Props) => {
-  const { startDate, endDate } = getStartAndEndDate(
-    Number(_startDate?.split('-')[0]),
-    Number(_startDate?.split('-')[1])
-  );
-  const myRevaluationList = await getMyRevaluations({ page: 1, limit: 10, startDate, endDate });
+  const myRevaluationList = await getMyRevaluations({ page: 1, limit: 10 });
   const isEmpty = myRevaluationList?.totalRecords === 0;
 
   if (isEmpty) {

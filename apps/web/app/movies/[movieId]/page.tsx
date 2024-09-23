@@ -25,8 +25,6 @@ const MovieDetailPage = async ({ params }: Props) => {
   const movieData = await getFindOneMovie(params.movieId);
   const revaluationData = await getRevaluations({ movieId: params.movieId });
 
-  console.log(revaluationData);
-
   return (
     <>
       <Suspense fallback={<h3>Loading</h3>}>

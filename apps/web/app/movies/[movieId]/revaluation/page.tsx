@@ -15,7 +15,7 @@ const RevaluationCreatePage = async ({ params, searchParams }: Props) => {
 
   return (
     <>
-      <Suspense fallback={<h3>loagindsdsf</h3>}>
+      <Suspense fallback={<h3></h3>}>
         <MovieReviewDetailInformation movieId={movieId} />
       </Suspense>
       <RevaluationInputs movieId={movieId} />

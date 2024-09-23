@@ -40,6 +40,7 @@ const MovieReviewDetailInformation = ({ movieData, revaluationData }: Props) => 
   const [isPending, startTransition] = useTransition();
 
   const currentDate = format(new Date(), 'yyyy-MM');
+  const currentMonth = format(new Date(), 'M');
   const [monthData, setMonthData] = useState(currentDate);
   const targetStatistics = movieData?.statistics[0];
   // const targetStatistics = useMemo(
@@ -71,8 +72,7 @@ const MovieReviewDetailInformation = ({ movieData, revaluationData }: Props) => 
     window.open(`https://serieson.naver.com/v3/search?query=${movieData?.data.title}`);
   };
 
-  console.log(targetStatistics?.numSpecialPoint);
-  console.log(revaluationData);
+  console.log(targetStatistics?.numSpecialPoint, targetStatistics?.numSpecialPointTopThree);
 
   return (
     <>
@@ -85,24 +85,24 @@ const MovieReviewDetailInformation = ({ movieData, revaluationData }: Props) => 
           {isNextButton && <ArrowIcon />}
         </button>
       </div>
-      <div className="container flex flex-col items-center gap-[32px] px-[100px]">
+      <div className="container flex flex-col items-center gap-[32px] px-[100px] pb-[46px]">
         <Tabs value={tabState} onChange={handleChange} className="w-full">
           <Tab label="재평가 정보" value={'info'} sx={{ width: 80, padding: '13px 0 10px' }} disableRipple />
           <Tab label="다른 평보기" value={'review'} sx={{ width: 80, padding: '13px 0 10px' }} disableRipple />
         </Tabs>
-        {targetStatistics && revaluationData ? (
+        {targetStatistics?.numStarsParticipants && revaluationData ? (
           <>
             <TabPanel value={tabState} active={'info'} className="flex flex-col items-center gap-[32px]">
               <div className="flex w-full flex-wrap gap-[10px]">
                 <SimpleAreaChart data={targetStatistics.numRecentStars} />
-                <SimpleBarChart data={[]} />
+                <SimpleBarChart data={targetStatistics.numSpecialPointTopThree} />
                 <EmotionRankCard
                   title="개봉 당시, 이 영화에 대해서 사람들은요"
-                  data={targetStatistics.numPastValuation}
+                  data={targetStatistics.numPastValuationPercent}
                 />
                 <EmotionRankCard
-                  title="7월에 이 영화에 대해서 사람들은요"
-                  data={targetStatistics.numPresentValuation}
+                  title={`${currentMonth}월에 이 영화에 대해서 사람들은요`}
+                  data={targetStatistics.numPresentValuationPercent}
                 />
               </div>
               <button
@@ -118,16 +118,24 @@ const MovieReviewDetailInformation = ({ movieData, revaluationData }: Props) => 
                 />
                 <PieCharts data={convertAgeTypeToKeyValueObjectArray(targetStatistics.numAge)} />
               </div>
+              <button
+                className="bg-Orange50 h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"
+                onClick={handleClickRevaluation}
+              >
+                재평가하기
+              </button>
             </TabPanel>
-            <TabPanel value={tabState} active={'review'} className="grid grid-cols-2 gap-[16px]">
-              {revaluationData?.results.map((item) => <ReviewCard item={item} key={item.id} />)}
+            <TabPanel value={tabState} active={'review'} className="flex flex-col items-center gap-[32px]">
+              <ul className="grid grid-cols-2 gap-[16px]">
+                {revaluationData?.results.map((item) => <ReviewCard item={item} key={item.id} />)}
+              </ul>
+              <button
+                className="bg-Orange50 h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"
+                onClick={handleClickRevaluation}
+              >
+                재평가하기
+              </button>
             </TabPanel>
-            <button
-              className="bg-Orange50 h-14 w-[341px] rounded-[10px] text-center text-2xl font-medium text-white"
-              onClick={handleClickRevaluation}
-            >
-              재평가하기
-            </button>
           </>
         ) : (
           <EmptyBlankView
