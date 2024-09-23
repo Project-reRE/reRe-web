@@ -27,7 +27,7 @@ const EmptyBlankView = ({ title, description, children, element = 'button', btnT
           <p className="whitespace-pre text-center text-base font-medium text-[#919191]">{description}</p>
         )}
         {children && children}
-        {element && <Button callback={callback}>{btnTxt}</Button>}
+        {element && btnTxt && <Button callback={callback}>{btnTxt}</Button>}
       </div>
     </div>
   );
