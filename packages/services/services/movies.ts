@@ -59,7 +59,17 @@ export interface MovieStatisticsType {
   numGender: GenderType;
   numAge: AgeType;
   currentDate: string;
-  // movie: null;
+  numSpecialPointTopThree: NumRank[];
+  numPastValuationPercent: NumRank[];
+  numPresentValuationPercent: NumRank[];
+  numGenderPercent: NumRank[];
+  numAgePercent: NumRank[];
+}
+
+export interface NumRank {
+  rank: number;
+  type: string;
+  value: number;
 }
 
 export interface MovieResponseDto {
