@@ -23,6 +23,17 @@ export enum MOVIE_SPECIAL_POINT_TYPE {
   '음향적 이슈' = 'SOUND_ELEMENT',
 }
 
+export enum MOVIE_SPECIAL_POINT_NAME {
+  PLANNING_INTENT = '기획 의도',
+  DIRECTORS_DIRECTION = '감독의 연출',
+  ACTING_SKILLS = '출연진 연기력',
+  SCENARIO = '시나리오',
+  OST = 'OST',
+  SOCIAL_ISSUES = '음향적사회적 요소',
+  VISUAL_ELEMENT = '시각적 요소',
+  SOUND_ELEMENT = '음향적 이슈',
+}
+
 export enum EMOTION_TYPE {
   '긍정적' = 'POSITIVE',
   '부정적' = 'NEGATIVE',
