@@ -19,5 +19,7 @@ RUN pnpm install --frozen-lockfile
 
 RUN turbo run build --filter=web
 
+RUN rm -rf node_modules 
+
 CMD cd ${BUILD_CONTEXT} && \
     pnpm run start
