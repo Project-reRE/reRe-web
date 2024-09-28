@@ -10,16 +10,14 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate 
 
 RUN apk update
-RUN pnpm add -g turbo
 
 # # 2단계: next.js 빌드 단계
 COPY . .
 
 RUN pnpm install --frozen-lockfile
 
-RUN turbo run build --filter=web
+RUN cd ./apps/web
 
-RUN rm -rf node_modules 
+RUN pnpm build
 
-CMD cd ${BUILD_CONTEXT} && \
-    pnpm run start
+CMD cd ./apps/web && pnpm start
