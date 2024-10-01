@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Ranking1, Ranking2, Ranking3 } from '@repo/icon';
 import { MovieData } from '@repo/services';
 

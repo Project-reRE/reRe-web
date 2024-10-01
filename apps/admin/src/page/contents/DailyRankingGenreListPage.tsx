@@ -1,4 +1,4 @@
-import { Button, Card, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Button, Card, Typography } from '@mui/material';
 import HorizontalTableLayout from 'components/HorizontalTableLayout';
 import { movieReportListDummy } from 'constant/dummy';
 import usePagination from 'hook/usePagination';
@@ -46,24 +46,4 @@ const SWrapper = styled.div`
 
 const SCard = styled(Card)`
   padding: 20px;
-`;
-
-const SSearchBox = styled.div`
-  margin-bottom: 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 24px;
-`;
-
-const SSearchItem = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-
-  p {
-    font-size: 16px;
-    font-weight: bold;
-    min-width: max-content;
-    width: 120px;
-  }
 `;

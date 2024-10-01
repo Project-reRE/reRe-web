@@ -63,16 +63,14 @@ const HorizontalTableLayout = ({
                 }
               }}
             >
-              {tableDataConfig.map(
-                ({ key, value, detail, link, param, valueParam }: HorizontalTableDataConfigType, index) => {
-                  switch (key) {
-                    case 'status':
-                      return <TableCell key={index}>{data[key] ? '활성화' : '차단'}</TableCell>;
-                    default:
-                      return <TableCell key={index}>{data[key]}</TableCell>;
-                  }
+              {tableDataConfig.map(({ key }: HorizontalTableDataConfigType, index) => {
+                switch (key) {
+                  case 'status':
+                    return <TableCell key={index}>{data[key] ? '활성화' : '차단'}</TableCell>;
+                  default:
+                    return <TableCell key={index}>{data[key]}</TableCell>;
                 }
-              )}
+              })}
             </TableCursorRow>
           ))}
         </TableBodyContainer>

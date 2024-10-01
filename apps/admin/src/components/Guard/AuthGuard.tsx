@@ -1,6 +1,4 @@
 import type { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
-import { PATH } from 'constant/paths';
 
 interface AuthGuardProps {
   children: ReactNode;

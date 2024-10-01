@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { FormControl, MenuItem, Pagination, Select, SelectChangeEvent } from '@mui/material';
@@ -28,7 +28,7 @@ const CustomPagination = ({
 }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handlePageChange = (event: ChangeEvent<unknown>, newPage: number): void => {
+  const handlePageChange = (_event: ChangeEvent<unknown>, newPage: number): void => {
     setPage(newPage);
 
     if (canHistoryPush) {

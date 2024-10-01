@@ -3,71 +3,49 @@ name: Deploy Admin to Amazon EC2
 on:
   push:
     branches:
-      - main
-      - development
+      - dev
+      - prod
     paths:
-      - 'apps/admin/**'
-  pull_request:
-    branches:
-      - main
-      - development
-    paths:
-      - 'apps/admin/**'
+      - "apps/admin/**"
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  IMAGE_TAG: ${{ github.sha }}
+  ECS_CLUSTER_NAME: ${{ secrets.ECS_CLUSTER_NAME }}
+  ECS_SERVICE_NAME: ${{ secrets.ECS_SERVICE_NAME }}
 
 jobs:
   build:
     name: Build and Deploy Admin
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22]
-        pnpm-version: [9]
-
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          fetch-depth: 2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+          aws-region: ap-northeast-2
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: ${{ matrix.pnpm-version }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build Admin app
-        run: pnpm --filter admin run build
-
-      - name: Build and push Docker image
+      - name: Login to Amazon ECR
         run: |
-          docker build -t ${{ secrets.DOCKER_REPO_ADMIN }} -f apps/admin/Dockerfile .
-          docker push ${{ secrets.DOCKER_REPO_ADMIN }}
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin rere-admin
 
-      - name: Set environment for production
-        if: github.ref == 'refs/heads/main'
-        run: echo "ENV_FILE=.env.production" >> $GITHUB_ENV
-
-      - name: Set environment for development
-        if: github.ref == 'refs/heads/development'
-        run: echo "ENV_FILE=.env.development" >> $GITHUB_ENV
-
-      - name: SSH to EC2 and deploy Admin
-        uses: appleboy/ssh-action@v0.1.2
+      - name: build
+        uses: docker/build-push-action@v5
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKER_REPO_ADMIN }}
-            cd /path/to/your/project  # 프로젝트 루트로 이동
-            docker-compose --env-file $ENV_FILE up -d
-            docker restart nginx  # Nginx 컨테이너를 재시작하여 새로운 설정 반영
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          build-args: BUILD_CONTEXT=apps/admin
+
+      - name: Update ECS service with new image
+        run: |
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER_NAME }} --service ${{ env.ECS_SERVICE_NAME }} --task-definition rere-admin --force-new-deployment --region ap-northeast-2

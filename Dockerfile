@@ -16,8 +16,6 @@ COPY . .
 
 RUN pnpm install --frozen-lockfile
 
-RUN cd ./apps/web
+RUN cd ./${BUILD_CONTEXT} && pnpm build
 
-RUN pnpm build
-
-CMD cd ./apps/web && pnpm start
+CMD cd ./${BUILD_CONTEXT} && pnpm start
