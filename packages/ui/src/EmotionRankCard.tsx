@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NegativeEmoji, NotSureEmoji, PositiveEmoji } from '@repo/icon';
-import { EMOTION_TYPE, EmotionStatisticsType } from '@repo/services';
+import { EMOTION_TYPE, NumRank } from '@repo/services';
 
 const emotionTextMap: { [key in EMOTION_TYPE]: string } = {
   [EMOTION_TYPE.긍정적]: '긍정적',
@@ -31,17 +31,25 @@ const Item = ({ emotionType, percent }: { emotionType: EMOTION_TYPE; percent: nu
 
 type Props = {
   title: string;
-  data?: EmotionStatisticsType;
+  data?: NumRank[];
 };
 
 const EmotionRankCard = ({ title, data }: Props) => {
+  const findPercent = (type: EMOTION_TYPE) => {
+    return data?.find((el) => el.type === type)?.value ?? 0;
+  };
+
+  const positivePercent = findPercent(EMOTION_TYPE.긍정적);
+  const negativePercent = findPercent(EMOTION_TYPE.부정적);
+  const notSurePercent = findPercent(EMOTION_TYPE['잘 모름']);
+
   return (
     <div className="flex h-fit w-[471px] flex-col items-center gap-[24px] rounded-[14px] bg-neutral-800 px-[24px] py-[20px]">
       <p className="w-full text-[15px] font-medium text-[#d1d1d1]">{title}</p>
       <div className="flex gap-[64px]">
-        <Item emotionType={EMOTION_TYPE.긍정적} percent={96.6} />
-        <Item emotionType={EMOTION_TYPE.부정적} percent={96.6} />
-        <Item emotionType={EMOTION_TYPE['잘 모름']} percent={96.6} />
+        <Item emotionType={EMOTION_TYPE.긍정적} percent={positivePercent} />
+        <Item emotionType={EMOTION_TYPE.부정적} percent={negativePercent} />
+        <Item emotionType={EMOTION_TYPE['잘 모름']} percent={notSurePercent} />
       </div>
     </div>
   );
