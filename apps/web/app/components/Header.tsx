@@ -1,10 +1,12 @@
 'use client';
 
-import React, { HTMLAttributes, useCallback, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useEffect, useLayoutEffect, useState } from 'react';
 
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+import _ from 'lodash';
 
 import { LogoIcon, MyIcon, SearchIcon } from '@repo/icon';
 
@@ -17,6 +19,7 @@ function Header() {
   const currentPathname = usePathname();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '');
+  const [isHeaderTop, setIsHeaderTop] = useState(true);
 
   const activeStyle = 'text-Orange60 font-semibold' as HTMLAttributes<HTMLElement>['className'];
 
@@ -33,16 +36,30 @@ function Header() {
     setSearchValue(e.target.value);
   };
 
-  const handleSearch = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (!searchValue) return;
-      if (e.key === 'Enter') return router.push(`${PATH.MOVIES}?search=${searchValue}`);
-    },
-    [searchValue]
-  );
+  const handleSearch = useCallback(() => {
+    if (!searchValue) return;
+    return router.push(`${PATH.MOVIES + PATH.RANKING}?search=${searchValue}`);
+  }, [searchValue]);
+
+  const handleScroll = useCallback(() => {
+    if (window.scrollY === 0) {
+      setIsHeaderTop(true);
+    } else {
+      setIsHeaderTop(false);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    document.addEventListener('scroll', handleScroll);
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="container fixed top-0 z-30 flex flex-col text-white">
+    <header
+      className={`container fixed top-0 z-30 flex flex-col text-white transition-all ${!isHeaderTop ? 'bg-Background' : ''}`}
+    >
       <div className="flex h-[65px] justify-between p-4 text-white">
         <nav>
           <ul className="flex h-full w-full gap-4 text-xl">
@@ -72,23 +89,20 @@ function Header() {
           </ul>
         </nav>
         {isLogin ? (
-          <>
-            <button onClick={handleClickSignOut}>로그아웃</button>
-            <Link href={PATH.MY} className="h-fit">
-              <MyIcon />
-            </Link>
-          </>
+          <Link href={PATH.MY} className="h-fit">
+            <MyIcon />
+          </Link>
         ) : (
           <Link href={PATH.SIGN_IN} className="text-base">
             로그인
           </Link>
         )}
       </div>
-      <div className="flex w-full justify-between px-4 text-white">
+      <div className="flex w-full justify-between px-4 py-2 text-white">
         <nav>
-          <ul className="flex h-full w-full gap-4 text-lg">
+          <ul className="flex h-full w-full items-center gap-4 text-lg">
             <li className="h-fit">
-              <Link href={`?tab=ranking`} className={isActive(PATH.RANKING) ? 'font-bold' : ''}>
+              <Link href={PATH.MOVIES + PATH.RANKING} className={isActive(PATH.RANKING) ? 'font-bold' : ''}>
                 데일리 랭킹
               </Link>
             </li>
@@ -106,10 +120,14 @@ function Header() {
             placeholder="개봉한지 5년이 지난 재평가가 필요한 영화를 찾아보세요"
             className="placeholder:text-Gray60 text-White w-[320px] text-sm font-medium"
             onChange={handleChangeSearchInput}
-            onKeyDown={handleSearch}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearch();
+            }}
             defaultValue={searchValue}
           />
-          <SearchIcon />
+          <button type="button" onClick={handleSearch}>
+            <SearchIcon />
+          </button>
         </div>
       </div>
     </header>

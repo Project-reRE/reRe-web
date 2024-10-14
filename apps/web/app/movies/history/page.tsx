@@ -8,14 +8,14 @@ type Props = {
   searchParams: Record<string, string> | null | undefined;
 };
 
-const HistoryPage = async ({ searchParams }: Props) => {
-  const startDate = searchParams?.startDate;
+const HistoryPage = ({ searchParams }: Props) => {
+  // const startDate = searchParams?.startDate;
 
   return (
     <section className="layout flex flex-col gap-[28px] px-[42px] pt-[32px]">
       <DateControl />
       <Suspense fallback={<SkeletonMovieItem />}>
-        <MovieRevaluationHistoryList startDate={startDate} />
+        <MovieRevaluationHistoryList startDate={''} />
       </Suspense>
     </section>
   );

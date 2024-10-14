@@ -1,11 +1,9 @@
 import { Suspense } from 'react';
 
-import dynamic from 'next/dynamic';
+import Ranking from 'movies/components/Ranking';
+import SearchResult from 'movies/components/SearchResult';
 
-import SkeletonMovieList from './components/SkeletonMovieList';
-
-const Ranking = dynamic(() => import('./components/Ranking'));
-const SearchResult = dynamic(() => import('./components/SearchResult'));
+import SkeletonMovieList from '../components/SkeletonMovieList';
 
 type Props = {
   searchParams: Record<string, string> | null | undefined;

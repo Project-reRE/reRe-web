@@ -8,7 +8,7 @@ import { PATH } from './constant/path';
 
 const page = () => {
   const router = useRouter();
-  router.push(PATH.MOVIES);
+  router.push(PATH.MOVIES + '/' + PATH.RANKING);
   return <div>hello world</div>;
 };
 
