@@ -8,11 +8,7 @@ import { addMonths, format, subMonths } from 'date-fns';
 
 import { ArrowIcon } from '@repo/icon';
 
-type Props = {
-  startDate?: string;
-};
-
-const DateControl = ({ startDate }: Props) => {
+const DateControl = () => {
   const router = useRouter();
   const currentDate = format(new Date(), 'yyyy-MM');
   const [monthData, setMonthData] = useState(currentDate);

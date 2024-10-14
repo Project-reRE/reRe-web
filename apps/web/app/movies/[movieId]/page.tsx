@@ -24,8 +24,6 @@ const MovieDetailPage = async ({ params }: Props) => {
   const movieData = await getFindOneMovie(params.movieId);
   const revaluationData = await getRevaluations({ movieId: params.movieId });
 
-  console.log(revaluationData);
-
   return (
     <>
       <MovieBanner movieId={params.movieId} />

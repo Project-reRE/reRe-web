@@ -13,7 +13,7 @@ const HistoryPage = async ({ searchParams }: Props) => {
 
   return (
     <section className="layout flex flex-col gap-[28px] px-[42px] pt-[32px]">
-      <DateControl startDate={startDate} />
+      <DateControl />
       <Suspense fallback={<SkeletonMovieItem />}>
         <MovieRevaluationHistoryList startDate={startDate} />
       </Suspense>

@@ -84,7 +84,7 @@ const MovieReviewDetailInformation = async ({ movieId }: Props) => {
                   {statistics?.[0]?.numStars}
                 </span>
                 <StyledRating
-                  defaultValue={statistics?.[0]?.numStars}
+                  defaultValue={Number(statistics?.[0]?.numStars)}
                   precision={0.1}
                   readOnly
                   icon={<StarIcon width={16} height={16} />}

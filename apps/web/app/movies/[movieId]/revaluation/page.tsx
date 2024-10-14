@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 
 import MovieReviewDetailInformation from '../MovieDefaultInformation';
 import ConfirmModal from './ConfirmModal';
