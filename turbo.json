@@ -19,5 +19,5 @@
   },
   "globalEnv": ["NEXT_PUBLIC_API_BASE_URL", "NODE_ENV"],
   "globalDependencies": [".env", "tsconfig.json"],
-  "globalPassThroughEnv": ["KAKAO_CLIENT_ID", "KAKAO_SECRET"]
+  "globalPassThroughEnv": ["NEXT_PUBLIC_KAKAO_CLIENT_ID", "KAKAO_SECRET"]
 }

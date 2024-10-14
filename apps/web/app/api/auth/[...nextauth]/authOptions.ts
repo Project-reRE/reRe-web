@@ -11,7 +11,7 @@ const AuthOptions = {
   },
   providers: [
     KakaoProvider({
-      clientId: process.env.KAKAO_CLIENT_ID!,
+      clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID!,
       clientSecret: process.env.KAKAO_SECRET!,
     }),
   ],
@@ -77,11 +77,13 @@ const AuthOptions = {
     },
 
     async redirect({ url, baseUrl }: any) {
-      // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
+      return url.startsWith(baseUrl) ? url : baseUrl;
+
+      // // Allows relative callback URLs
+      // if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // // Allows callback URLs on the same origin
+      // else if (new URL(url).origin === baseUrl) return url;
+      // return baseUrl;
     },
   },
 };
