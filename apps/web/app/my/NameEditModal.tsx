@@ -11,12 +11,7 @@ import { useGetMyProfile, usePutMy } from '@repo/services';
 
 import { ModalBody } from 'components/ModalBody';
 
-type Props = {
-  movieId: string;
-  searchParams: Record<string, string> | null | undefined;
-};
-
-const NameEditModal = ({ movieId, searchParams }: Props) => {
+const NameEditModal = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
