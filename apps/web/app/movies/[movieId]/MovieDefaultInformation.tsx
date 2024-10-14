@@ -76,7 +76,7 @@ const MovieReviewDetailInformation = async ({ movieId }: Props) => {
               <span className="ellipsis text-[13px] font-normal text-white">{actorsText}</span>
             </li>
           </ul>
-          {isCurrentRating && (
+          {!!isCurrentRating && (
             <div className="flex flex-col gap-2">
               <span className="text-[13px] font-normal text-white">7월 재평가 평점</span>
               <div className="flex items-center gap-[5px]">

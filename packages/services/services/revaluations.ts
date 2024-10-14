@@ -140,8 +140,12 @@ interface SearchType {
   endDate?: string;
 }
 
-export const getMyRevaluations = async ({ limit, movieId, startDate, endDate }: SearchType) =>
-  await http.get<GetListType<RevaluationResponseDto>>('/my/revaluations', { limit, movieId, startDate, endDate });
+export const getMyRevaluations = async ({ page, limit, movieId, startDate, endDate }: SearchType) => {
+  const queryParams = removeUndefined({ limit, movieId, startDate, endDate }) as SearchType;
+  return await http.get<GetListType<RevaluationResponseDto>>('/my/revaluations', {
+    ...queryParams,
+  });
+};
 
 export const useGetMyRevaluations = (
   { movieId, startDate, endDate }: SearchType,
