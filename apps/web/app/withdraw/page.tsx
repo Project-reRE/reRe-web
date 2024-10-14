@@ -14,7 +14,12 @@ const WithdrawPage = () => {
   const { mutate: deleteUser } = useDeleteMy();
 
   const handleDeleteUser = () => {
-    deleteUser();
+    deleteUser(undefined, {
+      onSuccess: () => {
+        sessionStorage.clear();
+        router.push(PATH.MAIN);
+      },
+    });
   };
 
   const handleClickCancelBtn = () => {
