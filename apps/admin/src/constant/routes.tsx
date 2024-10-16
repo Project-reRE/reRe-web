@@ -1,15 +1,17 @@
 import { RouteObject } from 'react-router-dom';
-import Login from '../page/Login';
-import UserListPage from '../page/user/UserListPage';
+
+import ContentsPage from 'page/contents/ContentsPage';
+import DailyRankingGenreListPage from 'page/contents/DailyRankingGenreListPage';
+import MovieTopBannerListPage from 'page/contents/MovieTopBannerListPage';
+import MovieOperatePage from 'page/operate/MovieOperatePage';
+import MovieReportDetailPage from 'page/operate/MovieReportDetailPage';
+import MovieReportListPage from 'page/operate/MovieReportListPage';
+import UserDetailPage from 'page/user/UserDetailPage';
+
 import DashboardLayout from '../components/DashboardLayout';
 import { AuthGuard, GuestGuard } from '../components/Guard';
-import MovieOperatePage from 'page/operate/MovieOperatePage';
-import MovieReportListPage from 'page/operate/MovieReportListPage';
-import MovieReportDetailPage from 'page/operate/MovieReportDetailPage';
-import UserDetailPage from 'page/user/UserDetailPage';
-import MovieTopBannerListPage from 'page/contents/MovieTopBannerListPage';
-import DailyRankingGenreListPage from 'page/contents/DailyRankingGenreListPage';
-import ContentsPage from 'page/contents/ContentsPage';
+import Login from '../page/Login';
+import UserListPage from '../page/user/UserListPage';
 
 // 라우터 설정
 const routes: RouteObject[] = [

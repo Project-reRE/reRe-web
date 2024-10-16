@@ -10,7 +10,7 @@
     "build": "turbo build",
     "dev": "dotenv -- turbo run dev",
     "web": "dotenv -- turbo dev --filter=web -- -p 3000",
-    "admin": "dotenv -- turbo dev --filter=admin -- --port 3001",
+    "admin": "dotenv -- turbo dev --filter=admin",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "start-pm2:dev": "pm2 start ecosystem.config.js",

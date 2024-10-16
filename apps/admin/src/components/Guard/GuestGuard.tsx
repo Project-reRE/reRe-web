@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
+
 import { PATH } from 'constant/paths';
 
 interface GuestGuardProps {
@@ -13,7 +14,7 @@ const GuestGuard = (props: GuestGuardProps) => {
     return <Navigate to={PATH.LOGIN} />;
   }
 
-  return props?.children;
+  return <>{props?.children}</>;
 };
 
 export default GuestGuard;
