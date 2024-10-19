@@ -1,22 +1,25 @@
 import { Suspense } from 'react';
 
-import Ranking from 'movies/components/Ranking';
-import SearchResult from 'movies/components/SearchResult';
+import dynamic from 'next/dynamic';
 
-import SkeletonMovieList from '../components/SkeletonMovieList';
+import SkeletonMovieList from 'movies/components/SkeletonMovieList';
+
+const Ranking = dynamic(() => import('movies/components/Ranking'), {
+  suspense: true,
+  ssr: true,
+});
+
+const SearchResult = dynamic(() => import('movies/components/SearchResult'), {
+  suspense: true,
+  ssr: false,
+});
 
 type Props = {
   searchParams: Record<string, string> | null | undefined;
 };
 
-const RankingPage = async ({ searchParams }: Props) => {
+const RankingPage = ({ searchParams }: Props) => {
   const search = searchParams?.search ?? '';
-  // const [moviesData, openMovieSetData, openBannerData] = Promise.all([
-  //   await getMovies({ title: search }),
-  //   await getOpenMovieSets(),
-  //   await getOpenBanner(),
-  // ]);
-
   const isSearch = Boolean(search);
 
   return (
@@ -26,7 +29,7 @@ const RankingPage = async ({ searchParams }: Props) => {
           <SearchResult search={search} />
         </Suspense>
       ) : (
-        <Suspense>
+        <Suspense fallback={<div className="white">Loading...</div>}>
           <Ranking />
         </Suspense>
       )}

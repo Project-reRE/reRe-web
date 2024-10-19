@@ -19,7 +19,8 @@
     ".next/types/**/*.ts",
     "postcss.config.js",
     "tailwind.config.ts",
-    "app/api/auth/[...nextauth]"
+    "app/api/auth/[...nextauth]",
+    "app/movies/ranking/loading.tss"
   ],
   "exclude": ["node_modules"]
 }
