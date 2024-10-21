@@ -19,5 +19,5 @@ RUN pnpm install --frozen-lockfile
 
 RUN turbo run build --filter=web
 
-CMD cd ${BUILD_CONTEXT} && \
-    pnpm run start
+
+CMD pnpm dotenv turbo run start --filter=web
