@@ -15,7 +15,11 @@
       "persistent": true,
       "inputs": ["$TURBO_DEFAULT$", ".env.development.local", ".env.local", ".env.development", ".env"]
     },
-    "test": {}
+    "test": {},
+    "start": {
+      "cache": true,
+      "persistent": true
+    }
   },
   "globalEnv": ["NEXT_PUBLIC_API_BASE_URL", "NODE_ENV"],
   "globalDependencies": [".env", "tsconfig.json"],

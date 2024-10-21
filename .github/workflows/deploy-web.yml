@@ -56,6 +56,6 @@ jobs:
             BUILD_CONTEXT=apps/web
             APP_CONTEXT=web
 
-      - name: Update ECS service with new image
-        run: |
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER_NAME }} --service ${{ env.ECS_SERVICE_NAME }} --task-definition rere-web --force-new-deployment --region ap-northeast-2
+      # - name: Update ECS service with new image
+      #   run: |
+      #     aws ecs update-service --cluster ${{ env.ECS_CLUSTER_NAME }} --service ${{ env.ECS_SERVICE_NAME }} --task-definition rere-web --force-new-deployment --region ap-northeast-2
