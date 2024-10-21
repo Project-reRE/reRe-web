@@ -17,6 +17,7 @@ COPY . .
 
 RUN pnpm install --frozen-lockfile
 
-# RUN turbo run build --filter=web
+RUN turbo run build --filter=web
 
-CMD pnpm web
+CMD cd ${BUILD_CONTEXT} && \
+    pnpm run start

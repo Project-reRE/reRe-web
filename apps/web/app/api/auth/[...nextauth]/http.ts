@@ -5,7 +5,7 @@ const apiConfig = {
   useLoading: true,
   useToken: true,
 };
-
+console.log(process.env);
 type apiConfigType = typeof apiConfig;
 type fetchOptionType = apiConfigType & RequestInit;
 
