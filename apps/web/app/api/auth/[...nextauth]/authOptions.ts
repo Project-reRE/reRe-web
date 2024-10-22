@@ -114,6 +114,7 @@ const AuthOptions = {
       // return baseUrl;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default AuthOptions;

@@ -1,0 +1,61 @@
+name: Deploy Web to Amazon EC2
+
+on:
+  push:
+    branches:
+      - dev
+      - prod
+    paths:
+      - "apps/web/**"
+      - ".github/workflows/deploy-web.yml"
+      - "docker-compose.yml"
+      - "ecosystem.config.js"
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  IMAGE_TAG: ${{ github.sha }}
+  ECS_CLUSTER_NAME: ${{ secrets.ECS_CLUSTER_NAME }}
+  ECS_SERVICE_NAME: ${{ secrets.ECS_SERVICE_NAME }}
+  ENV_NAME: env.development
+
+jobs:
+  build:
+    name: Build and Deploy Web
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
+
+      - name: set env
+        run: |
+          aws s3 cp s3://rere-web-env/${{ env.ENV_NAME }} ./.env
+
+      - name: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          build-args: |
+            BUILD_CONTEXT=apps/web
+            APP_CONTEXT=web
+
+      # - name: Update ECS service with new image
+      #   run: |
+      #     aws ecs update-service --cluster ${{ env.ECS_CLUSTER_NAME }} --service ${{ env.ECS_SERVICE_NAME }} --task-definition rere-web --force-new-deployment --region ap-northeast-2

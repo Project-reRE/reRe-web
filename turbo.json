@@ -15,7 +15,12 @@
       "persistent": true,
       "inputs": ["$TURBO_DEFAULT$", ".env.development.local", ".env.local", ".env.development", ".env"]
     },
-    "test": {}
+    "test": {},
+    "start": {
+      "cache": true,
+      "persistent": true,
+      "inputs": ["$TURBO_DEFAULT$", ".env.development.local", ".env.local", ".env.development", ".env"]
+    }
   },
   "globalEnv": ["NEXT_PUBLIC_API_BASE_URL", "NODE_ENV"],
   "globalDependencies": [".env", "tsconfig.json"],
@@ -24,6 +29,7 @@
     "KAKAO_SECRET",
     "NEXT_PUBLIC_GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
-    "NEXTAUTH_URL"
+    "NEXTAUTH_URL",
+    "NEXTAUTH_SECRET"
   ]
 }
